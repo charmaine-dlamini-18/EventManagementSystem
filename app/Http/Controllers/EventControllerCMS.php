@@ -2,132 +2,175 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EventUpdated;
 use App\Models\Event;
 use App\Models\Registration;
-use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
+/**
+ * EventControllerCMS
+ *
+ * Handles all Event CRUD operations.
+ * Authorization is delegated to EventPolicyCMS via $this->authorize().
+ * Notifies confirmed attendees when an event is updated.
+ */
 class EventControllerCMS extends Controller
 {
+    /**
+     * Display a paginated, filterable list of events.
+     */
     public function index(Request $request): View
     {
         $query = Event::with('user');
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
-                $q->where('title', 'like', '%'.$search.'%')
-                  ->orWhere('description', 'like', '%'.$search.'%');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
 
-        if ($request->has('status')) {
+        if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
         }
 
-        $events = $query->latest()->paginate(12);
-            
+        $events = $query->latest()->paginate(12)->withQueryString();
+
         return view('events.index', compact('events'));
     }
 
+    /**
+     * Show the form for creating a new event.
+     */
     public function create(): View
     {
+        $this->authorize('create', Event::class);
+
         return view('events.create');
     }
 
+    /**
+     * Store a newly created event.
+     */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Event::class);
+
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'required|string',
-            'location' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'capacity' => 'nullable|integer|min:1',
-            'status' => 'required|in:draft,published',
+            'location'    => 'required|string|max:255',
+            'start_date'  => 'required|date|after:now',
+            'end_date'    => 'required|date|after:start_date',
+            'capacity'    => 'nullable|integer|min:1',
+            'status'      => 'required|in:draft,published',
         ]);
 
-        $event = new Event();
-        $event->user_id = $request->user()->id;
-        $event->title = $validated['title'];
-        $event->description = $validated['description'];
-        $event->location = $validated['location'];
-        $event->start_date = $validated['start_date'];
-        $event->end_date = $validated['end_date'];
-        $event->capacity = $validated['capacity'];
-        $event->status = $validated['status'];
-        $event->save();
+        Event::create(array_merge($validated, ['user_id' => Auth::id()]));
 
-        return redirect()->route('events.index')->with('success', 'Event created successfully.');
+        return redirect()->route('events.index')
+            ->with('success', 'Event created successfully.');
     }
 
+    /**
+     * Display a single event and its registrations.
+     */
     public function show(Event $event): View
     {
+        $this->authorize('view', $event);
+
         $event->load('user');
-        $registrations = RegistrationCMS::where('event_id', $event->id)->with('user')->get();
+
+        $registrations = Registration::where('event_id', $event->id)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('events.show', compact('event', 'registrations'));
     }
 
+    /**
+     * Show the edit form.
+     */
     public function edit(Event $event): View
     {
-        $user = Auth::user();
-        if ($user->id != $event->user_id && $user->role != 'admin') {
-            return redirect()->route('events.index')->with('error', 'Unauthorized.');
-        }
+        $this->authorize('update', $event);
+
         return view('events.edit', compact('event'));
     }
 
+    /**
+     * Update the event and notify all confirmed attendees.
+     *
+     * Emails are queued — they do not block the response.
+     * Only sends notifications if meaningful fields changed.
+     */
     public function update(Request $request, Event $event): RedirectResponse
     {
-        $user = Auth::user();
-        if ($user->id != $event->user_id && $user->role != 'admin') {
-            return redirect()->route('events.index')->with('error', 'Unauthorized.');
-        }
+        $this->authorize('update', $event);
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'required|string',
-            'location' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'capacity' => 'nullable|integer|min:1',
-            'status' => 'required|in:draft,published',
+            'location'    => 'required|string|max:255',
+            'start_date'  => 'required|date',
+            'end_date'    => 'required|date|after:start_date',
+            'capacity'    => 'nullable|integer|min:1',
+            'status'      => 'required|in:draft,published,cancelled',
         ]);
 
-        $event->title = $validated['title'];
-        $event->description = $validated['description'];
-        $event->location = $validated['location'];
-        $event->start_date = $validated['start_date'];
-        $event->end_date = $validated['end_date'];
-        $event->capacity = $validated['capacity'];
-        $event->status = $validated['status'];
-        $event->save();
+        // Track which fields changed to decide if attendees should be notified
+        $notifyFields = ['title', 'start_date', 'end_date', 'location', 'status'];
+        $hasImportantChange = collect($notifyFields)
+            ->contains(fn($field) => $event->$field != ($validated[$field] ?? $event->$field));
 
-        return redirect()->route('events.show', $event)->with('success', 'Event updated successfully.');
+        $event->update($validated);
+
+        // Notify confirmed attendees only if key event details changed
+        if ($hasImportantChange) {
+            $confirmedRegistrations = $event->registrations()
+                ->where('status', 'confirmed')
+                ->with('user')
+                ->get();
+
+            foreach ($confirmedRegistrations as $registration) {
+                Mail::to($registration->user->email)
+                    ->queue(new EventUpdated($event, $registration->user));
+            }
+        }
+
+        return redirect()->route('events.show', $event)
+            ->with('success', 'Event updated successfully.' . ($hasImportantChange ? ' Attendees have been notified.' : ''));
     }
 
+    /**
+     * Delete the event.
+     */
+    public function destroy(Event $event): RedirectResponse
+    {
+        $this->authorize('delete', $event);
+
+        $event->delete();
+
+        return redirect()->route('events.index')
+            ->with('success', 'Event deleted successfully.');
+    }
+
+    /**
+     * Display the calendar view of upcoming published events.
+     */
     public function calendar(): View
     {
         $events = Event::where('status', 'published')
-            ->where('start_date', '>=', date('Y-m-d H:i:s'))
+            ->where('start_date', '>=', now())
             ->orderBy('start_date')
             ->get();
-            
-        return view('events.calendar', compact('events'));
-    }
 
-    public function destroy(Event $event): RedirectResponse
-    {
-        $user = Auth::user();
-        if ($user->id != $event->user_id && $user->role != 'admin') {
-            return redirect()->route('events.index')->with('error', 'Unauthorized.');
-        }
-        
-        $event->delete();
-        
-        return redirect()->route('events.index')->with('success', 'Event deleted successfully.');
+        return view('events.calendar', compact('events'));
     }
 }

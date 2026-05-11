@@ -4,6 +4,13 @@
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         
+
+        @if(session('success'))
+            <div class="bg-green-50 border border-green-200 text-green-700 rounded-lg px-4 py-3 text-sm">{{ session('success') }}</div>
+        @endif
+        @if(session('error'))
+            <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">{{ session('error') }}</div>
+        @endif
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div>
@@ -16,12 +23,12 @@
                     Calendar
                 </a>
                 @auth
-                    @if(in_array(auth()->user()->role, ['admin', 'organizer']))
+                    @can('manage-events')
                         <a href="{{ route('events.create') }}" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
                             <i data-lucide="plus" class="w-4 h-4"></i>
                             Create Event
                         </a>
-                    @endif
+                    @endcan
                 @endauth
             </div>
         </div>
@@ -41,14 +48,14 @@
                 <button type="submit" class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">Search</button>
                 @if(request('search') || request('status'))
                     <a href="{{ route('events.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium">Clear</a>
-                @endif
+                @endcan
             </form>
         </div>
 
         <!-- Results Count -->
         @if(request('search') || request('status'))
             <p class="text-sm text-gray-500">{{ $events->total() }} result(s) found</p>
-        @endif
+        @endcan
 
         <!-- Events Grid -->
         @if($events->isEmpty())
@@ -75,7 +82,7 @@
                                 </span>
                                 @if($event->capacity)
                                     <span class="text-xs text-gray-400">{{ $event->registrations()->where('status', 'confirmed')->count() }}/{{ $event->capacity }} spots</span>
-                                @endif
+                                @endcan
                             </div>
                             <h2 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">{{ $event->title }}</h2>
                             <p class="text-sm text-gray-500 mb-4 line-clamp-2">{{ $event->description }}</p>
@@ -103,7 +110,7 @@
                 @endforeach
             </div>
             <div class="flex justify-center">{{ $events->withQueryString()->links() }}</div>
-        @endif
+        @endcan
     </div>
 </div>
 @endsection

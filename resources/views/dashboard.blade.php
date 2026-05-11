@@ -3,83 +3,105 @@
 @section('content')
 <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-        
-        <div class="bg-green-600 rounded p-6 text-white">
-            <h3 class="text-xl font-bold">Welcome, {{ Auth::user()->name }}</h3>
-            <p class="text-green-100">Your Role: {{ ucfirst(Auth::user()->role) }}</p>
+
+        @if(session('success'))
+            <div class="bg-green-50 border border-green-200 text-green-700 rounded-lg px-4 py-3 text-sm">{{ session('success') }}</div>
+        @endif
+
+        <!-- Welcome Banner -->
+        <div class="bg-green-600 rounded-xl p-6 text-white">
+            <h1 class="text-xl font-bold">Welcome back, {{ Auth::user()->name }}!</h1>
+            <p class="text-green-100 mt-0.5">{{ Auth::user()->role_label }}</p>
         </div>
 
-        <?php 
-        $user = Auth::user();
-        $userId = $user->id;
-        
-        if ($user->role == 'organizer' || $user->role == 'admin'):
-            $myEventIds = \App\Models\Event::where('user_id', $userId)->pluck('id')->toArray();
-            $totalRegistrations = \App\Models\Registration::whereIn('event_id', $myEventIds)->count();
-            $confirmedCount = \App\Models\Registration::whereIn('event_id', $myEventIds)->where('status', 'confirmed')->count();
-            $pendingCount = \App\Models\Registration::whereIn('event_id', $myEventIds)->where('status', 'pending')->count();
-        else:
-            $myRegistrations = \App\Models\Registration::where('user_id', $userId)->get();
-            $eventsAttending = $myRegistrations->where('status', 'confirmed')->count();
-            $confirmedCount = $myRegistrations->where('status', 'confirmed')->count();
-            $pendingCount = $myRegistrations->where('status', 'pending')->count();
-        endif;
-        ?>
-        
-        <?php if ($user->role == 'organizer' || $user->role == 'admin'): ?>
-        
-        <div class="grid grid-cols-4 gap-4">
-            <div class="bg-white rounded p-5 border">
-                <p class="text-2xl font-bold">{{ $user->events()->count() }}</p>
-                <p class="text-gray-500">My Events</p>
-            </div>
-            <div class="bg-white rounded p-5 border">
-                <p class="text-2xl font-bold">{{ $totalRegistrations }}</p>
-                <p class="text-gray-500">Total Registrations</p>
-            </div>
-            <div class="bg-white rounded p-5 border">
-                <p class="text-2xl font-bold">{{ $confirmedCount }}</p>
-                <p class="text-gray-500">Confirmed</p>
-            </div>
-            <div class="bg-white rounded p-5 border">
-                <p class="text-2xl font-bold">{{ $pendingCount }}</p>
-                <p class="text-gray-500">Pending</p>
-            </div>
-        </div>
+        @if(in_array(Auth::user()->role, ['admin', 'organizer']))
+            {{-- Organizer / Admin Dashboard --}}
 
-        <div class="bg-white rounded border p-5">
-            <h3 class="text-base font-semibold mb-4">Organizer Actions</h3>
-            <a href="{{ route('events.index') }}" class="inline-block px-4 py-2 bg-green-600 text-white rounded mr-2">Browse Events</a>
-            <a href="{{ route('events.create') }}" class="inline-block px-4 py-2 bg-green-600 text-white rounded mr-2">Create Event</a>
-            <a href="{{ route('registrations.index') }}" class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded mr-2">View Registrations</a>
-            <a href="{{ route('events.calendar') }}" class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded">Calendar</a>
-        </div>
-
-        <?php else: ?>
-        
-        <div class="grid grid-cols-3 gap-4">
-            <div class="bg-white rounded p-5 border">
-                <p class="text-2xl font-bold">{{ $eventsAttending }}</p>
-                <p class="text-gray-500">Events Attending</p>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['my_events'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">My Events</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['upcoming_events'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Upcoming</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['total_registrations'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Total Registrations</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-green-600">{{ $stats['confirmed'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Confirmed</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-amber-500">{{ $stats['pending'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Pending</p>
+                </div>
             </div>
-            <div class="bg-white rounded p-5 border">
-                <p class="text-2xl font-bold">{{ $confirmedCount }}</p>
-                <p class="text-gray-500">Confirmed</p>
-            </div>
-            <div class="bg-white rounded p-5 border">
-                <p class="text-2xl font-bold">{{ $pendingCount }}</p>
-                <p class="text-gray-500">Pending</p>
-            </div>
-        </div>
 
-        <div class="bg-white rounded border p-5">
-            <h3 class="text-base font-semibold mb-4">Attendee Actions</h3>
-            <a href="{{ route('events.index') }}" class="inline-block px-4 py-2 bg-green-600 text-white rounded mr-2">Browse Events</a>
-            <a href="{{ route('registrations.index') }}" class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded mr-2">My Registrations</a>
-            <a href="{{ route('events.calendar') }}" class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded">Calendar</a>
-        </div>
+            @if($stats['pending'] > 0)
+                <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl px-5 py-4 text-sm font-medium">
+                    ⏳ You have <strong>{{ $stats['pending'] }}</strong> pending registration(s) awaiting your approval.
+                    <a href="{{ route('registrations.index') }}" class="underline ml-1">Review now →</a>
+                </div>
+            @endif
 
-        <?php endif; ?>
+            <div class="bg-white rounded-xl border shadow-sm p-5">
+                <h2 class="text-base font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ route('events.create') }}" class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
+                        + Create Event
+                    </a>
+                    <a href="{{ route('events.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        Browse Events
+                    </a>
+                    <a href="{{ route('registrations.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        View Registrations
+                    </a>
+                    <a href="{{ route('events.calendar') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        Calendar
+                    </a>
+                </div>
+            </div>
+
+        @else
+            {{-- Attendee Dashboard --}}
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['events_attending'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Events Attending</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-green-600">{{ $stats['confirmed'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Confirmed</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-amber-500">{{ $stats['pending'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Pending Approval</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-blue-600">{{ $stats['upcoming'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Upcoming</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border shadow-sm p-5">
+                <h2 class="text-base font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ route('events.index') }}" class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
+                        Browse Events
+                    </a>
+                    <a href="{{ route('registrations.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        My Registrations
+                    </a>
+                    <a href="{{ route('events.calendar') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        Calendar
+                    </a>
+                </div>
+            </div>
+        @endif
 
     </div>
 </div>

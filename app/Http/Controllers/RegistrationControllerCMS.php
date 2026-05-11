@@ -2,109 +2,160 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewRegistrationReceived;
+use App\Mail\RegistrationApproved;
+use App\Mail\RegistrationDeclined;
 use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
+/**
+ * RegistrationControllerCMS
+ *
+ * Handles event registration for attendees and approval/decline by organizers.
+ * Authorization is delegated to RegistrationPolicyCMS via $this->authorize().
+ * Email notifications are queued (non-blocking) via Laravel Mail + ShouldQueue.
+ */
 class RegistrationControllerCMS extends Controller
 {
+    /**
+     * Show registrations list.
+     * - Attendees see their own registrations.
+     * - Organizers/Admins see registrations for events they own.
+     */
     public function index(): View
     {
-        $userId = Auth::id();
-        $registrations = Registration::with('event')
-            ->where('user_id', $userId)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-            
+        $user = Auth::user();
+
+        if (in_array($user->role, ['admin', 'organizer'])) {
+            // Organizers see registrations for their events
+            $registrations = Registration::with(['event', 'user'])
+                ->whereHas('event', fn($q) => $q->where('user_id', $user->id))
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+        } else {
+            // Attendees see only their own registrations
+            $registrations = Registration::with('event')
+                ->where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+        }
+
         return view('registrations.index', compact('registrations'));
     }
 
-    public function store(Request $request): RedirectResponse
+    /**
+     * Register the authenticated user for an event.
+     * Notifies the organizer via email after successful registration.
+     */
+    public function store(Event $event): RedirectResponse
     {
-        $event = Event::findOrFail($request->route('event'));
-        
+        $this->authorize('register', [Registration::class, $event]);
+
         $user = Auth::user();
-        
-        if ($event->user_id == $user->id) {
-            return back()->with('error', 'You cannot register for your own event.');
-        }
-        
-        if ($event->status != 'published') {
-            return back()->with('error', 'Cannot register for this event.');
-        }
 
-        $existing = Registration::where('user_id', $user->id)
+        // Friendly duplicate check (DB unique constraint is the safety net)
+        $alreadyRegistered = Registration::where('user_id', $user->id)
             ->where('event_id', $event->id)
-            ->first();
+            ->exists();
 
-        if ($existing) {
-            return back()->with('error', 'Already registered.');
+        if ($alreadyRegistered) {
+            return back()->with('error', 'You are already registered for this event.');
         }
 
-        $registration = new Registration();
-        $registration->user_id = $user->id;
-        $registration->event_id = $event->id;
-        $registration->status = 'pending';
-        $registration->save();
+        // Check capacity
+        if ($event->capacity) {
+            $confirmedCount = Registration::where('event_id', $event->id)
+                ->where('status', 'confirmed')
+                ->count();
 
-        return redirect()->route('events.show', $event)->with('success', 'Registered! Waiting for organizer approval.');
+            if ($confirmedCount >= $event->capacity) {
+                return back()->with('error', 'This event has reached full capacity.');
+            }
+        }
+
+        $registration = Registration::create([
+            'user_id'  => $user->id,
+            'event_id' => $event->id,
+            'status'   => 'pending',
+        ]);
+
+        // Load relationships needed for the email
+        $registration->load(['event.user', 'user']);
+
+        // Notify the organizer a new attendee has registered
+        Mail::to($registration->event->user->email)
+            ->queue(new NewRegistrationReceived($registration));
+
+        return redirect()->route('events.show', $event)
+            ->with('success', 'Registered! Awaiting organizer approval.');
     }
 
-    public function unregister(Request $request, Event $event): RedirectResponse
+    /**
+     * Cancel (unregister) the authenticated user's registration.
+     */
+    public function unregister(Event $event): RedirectResponse
     {
-        $user = Auth::user();
-        
-        $registration = Registration::where('user_id', $user->id)
+        $registration = Registration::where('user_id', Auth::id())
             ->where('event_id', $event->id)
-            ->first();
-        
-        if (!$registration) {
-            return redirect()->back()->with('error', 'Registration not found.');
-        }
-        
+            ->firstOrFail();
+
+        $this->authorize('cancel', $registration);
+
         $registration->delete();
-        
-        return redirect()->back()->with('success', 'Registration cancelled successfully.');
+
+        return back()->with('success', 'Registration cancelled successfully.');
     }
 
+    /**
+     * Approve a registration.
+     * Sends a confirmation email to the attendee.
+     */
     public function approve(Registration $registration): RedirectResponse
     {
-        $user = Auth::user();
-        $registration->load('event');
-        
-        if ($user->id != $registration->event->user_id && $user->role != 'admin') {
-            return back()->with('error', 'Unauthorized.');
+        $this->authorize('approve', $registration);
+
+        $registration->loadMissing(['event', 'user']);
+
+        // Enforce capacity before approving
+        if ($registration->event->capacity) {
+            $confirmedCount = Registration::where('event_id', $registration->event_id)
+                ->where('status', 'confirmed')
+                ->count();
+
+            if ($confirmedCount >= $registration->event->capacity) {
+                return back()->with('error', 'Event is at full capacity. Cannot approve.');
+            }
         }
 
-        $confirmed = Registration::where('event_id', $registration->event->id)
-            ->where('status', 'confirmed')
-            ->count();
-            
-        if ($registration->event->capacity && $confirmed >= $registration->event->capacity) {
-            return back()->with('error', 'Event is at full capacity.');
-        }
+        $registration->update(['status' => 'confirmed']);
 
-        $registration->status = 'confirmed';
-        $registration->save();
-        
-        return back()->with('success', 'Registration approved.');
+        // Notify the attendee their registration was approved
+        Mail::to($registration->user->email)
+            ->queue(new RegistrationApproved($registration));
+
+        return back()->with('success', 'Registration approved. Attendee notified by email.');
     }
 
+    /**
+     * Decline a registration.
+     * Sends a decline notification email to the attendee.
+     */
     public function decline(Registration $registration): RedirectResponse
     {
-        $user = Auth::user();
-        $registration->load('event');
-        
-        if ($user->id != $registration->event->user_id && $user->role != 'admin') {
-            return back()->with('error', 'Unauthorized.');
-        }
+        $this->authorize('decline', $registration);
 
-        $registration->status = 'cancelled';
-        $registration->save();
-        
-        return back()->with('success', 'Registration declined.');
+        $registration->loadMissing(['event', 'user']);
+
+        $registration->update(['status' => 'cancelled']);
+
+        // Notify the attendee their registration was declined
+        Mail::to($registration->user->email)
+            ->queue(new RegistrationDeclined($registration));
+
+        return back()->with('success', 'Registration declined. Attendee notified by email.');
     }
 }

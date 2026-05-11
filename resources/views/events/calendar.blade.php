@@ -14,13 +14,11 @@
                 <a href="{{ route('events.index') }}" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
                     List View
                 </a>
-                @auth
-                    @if(in_array(auth()->user()->role, ['admin', 'organizer']))
-                        <a href="{{ route('events.create') }}" class="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-medium">
-                            + Create Event
-                        </a>
-                    @endif
-                @endauth
+                @can('manage-events')
+                    <a href="{{ route('events.create') }}" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
+                        + Create Event
+                    </a>
+                @endcan
             </div>
         </div>
 
@@ -32,19 +30,12 @@
 </div>
 
 @php
-$events = \App\Models\Event::where('status', 'published')
-    ->where('start_date', '>=', now()->subMonth())
-    ->orderBy('start_date')
-    ->get();
-
-$calendarEvents = $events->map(function($e) {
-    return [
-        'title' => $e->title,
-        'start' => $e->start_date,
-        'end' => $e->end_date,
-        'url' => route('events.show', $e->id)
-    ];
-});
+$calendarEvents = $events->map(fn($e) => [
+    'title' => $e->title,
+    'start' => $e->start_date->toIso8601String(),
+    'end'   => $e->end_date->toIso8601String(),
+    'url'   => route('events.show', $e->id),
+]);
 @endphp
 
 @push('styles')
