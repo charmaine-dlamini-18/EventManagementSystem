@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventControllerCMS;
 use App\Http\Controllers\RegistrationControllerCMS;
 use Illuminate\Support\Facades\Route;
@@ -11,7 +12,7 @@ Route::get('/events/calendar', [EventControllerCMS::class, 'calendar'])->name('e
 Route::get('/events/{event}', [EventControllerCMS::class, 'show'])->name('events.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
