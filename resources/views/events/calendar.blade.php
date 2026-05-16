@@ -14,7 +14,7 @@
                 <a href="{{ route('events.index') }}" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
                     List View
                 </a>
-                @can('manage-events')
+                @can('manage-events-cms')
                     <a href="{{ route('events.create') }}" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
                         + Create Event
                     </a>
@@ -22,7 +22,6 @@
             </div>
         </div>
 
-        <!-- Calendar -->
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 md:p-6">
             <div id="calendar"></div>
         </div>

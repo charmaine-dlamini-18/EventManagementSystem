@@ -2,80 +2,55 @@
 
 namespace App\Policies;
 
-use App\Models\Event;
-use App\Models\User;
+use App\Models\EventCMS;
+use App\Models\UserCMS;
 use Illuminate\Auth\Access\Response;
 
 /**
  * EventPolicyCMS
  *
  * Handles all authorization logic for Event actions.
- * Replaces manual role/ownership checks in EventControllerCMS.
  *
  * Roles:
- *  - admin     → full access to everything
  *  - organizer → can create events; can only edit/delete their own
+ *  - admin     → read-only; cannot create or manage events
  *  - attendee  → read-only; cannot create or manage events
  */
 class EventPolicyCMS
 {
     /**
-     * Admins bypass all policy checks automatically.
-     * This method runs before any other policy method.
+     * Any user can view the events listing.
      */
-    public function before(User $user, string $ability): bool|null
-    {
-        if ($user->role === 'admin') {
-            return true;
-        }
-
-        return null; // Let specific policy methods decide for non-admins
-    }
-
-    /**
-     * Any authenticated user can view the events listing.
-     */
-    public function viewAny(?User $user): bool
+    public function viewAny(?UserCMS $user): bool
     {
         return true;
     }
 
     /**
      * Any user (including guests) can view a single published event.
-     * Draft events are only visible to the owner or admin.
+     * Draft events are only visible to the owning organizer.
      */
-    public function view(?User $user, Event $event): bool
+    public function view(?UserCMS $user, EventCMS $event): bool
     {
         if ($event->status === 'published') {
             return true;
         }
 
-        // Draft events: only the owning organizer can see them
         return $user && $user->id === $event->user_id;
     }
 
     /**
-     * Only admins and organizers can create events.
+     * Only organizers can create events.
      */
-    public function create(User $user): bool
+    public function create(UserCMS $user): bool
     {
-        return in_array($user->role, ['admin', 'organizer']);
+        return $user->role === 'organizer';
     }
 
     /**
-     * Only the event owner or admin can edit an event.
+     * Only the event owner can edit an event.
      */
-    public function update(User $user, Event $event): Response
-    {
-        return $user->id === $event->user_id
-            ? Response::allow()
-            : Response::deny('You do not own this event.');
-    }
-
-    /**
-     * Only the event owner or admin can delete an event.
-     */
-    public function delete(User $user, Event $event): Response
+    public function update(UserCMS $user, EventCMS $event): Response
     {
         return $user->id === $event->user_id
             ? Response::allow()
@@ -83,9 +58,19 @@ class EventPolicyCMS
     }
 
     /**
-     * Only the event owner or admin can manage (approve/decline) registrations.
+     * Only the event owner can delete an event.
      */
-    public function manageRegistrations(User $user, Event $event): bool
+    public function delete(UserCMS $user, EventCMS $event): Response
+    {
+        return $user->id === $event->user_id
+            ? Response::allow()
+            : Response::deny('You do not own this event.');
+    }
+
+    /**
+     * Only the event owner can manage (approve/decline) registrations.
+     */
+    public function manageRegistrations(UserCMS $user, EventCMS $event): bool
     {
         return $user->id === $event->user_id;
     }

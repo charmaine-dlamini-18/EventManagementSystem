@@ -2,53 +2,38 @@
 
 namespace App\Policies;
 
-use App\Models\Event;
-use App\Models\Registration;
-use App\Models\User;
+use App\Models\EventCMS;
+use App\Models\RegistrationCMS;
+use App\Models\UserCMS;
 use Illuminate\Auth\Access\Response;
 
 /**
  * RegistrationPolicyCMS
  *
  * Handles all authorization logic for Registration actions.
- * Replaces manual ownership/role checks in RegistrationControllerCMS.
  *
  * Rules:
  *  - Only authenticated users can register for events
  *  - Users cannot register for their own events
- *  - Only the event owner or admin can approve/decline registrations
+ *  - Only the event owner can approve/decline registrations
  *  - Users can only cancel their own registrations
  */
 class RegistrationPolicyCMS
 {
     /**
-     * Admins bypass all policy checks automatically.
+     * All authenticated users; scope is applied in the controller.
      */
-    public function before(User $user, string $ability): bool|null
+    public function viewAny(UserCMS $user): bool
     {
-        if ($user->role === 'admin') {
-            return true;
-        }
-
-        return null;
-    }
-
-    /**
-     * Organizers and admins can view all registrations for their events.
-     * Attendees can only view their own registrations.
-     */
-    public function viewAny(User $user): bool
-    {
-        return true; // All authenticated users; scope is applied in the controller
+        return true;
     }
 
     /**
      * A user can register for an event if:
      *  - The event is published
      *  - They are not the event organizer
-     *  - They haven't already registered (enforced in controller/DB unique constraint)
      */
-    public function register(User $user, Event $event): Response
+    public function register(UserCMS $user, EventCMS $event): Response
     {
         if ($event->status !== 'published') {
             return Response::deny('This event is not open for registration.');
@@ -63,9 +48,8 @@ class RegistrationPolicyCMS
 
     /**
      * A user can cancel their own registration.
-     * Admins can cancel any registration (handled by before()).
      */
-    public function cancel(User $user, Registration $registration): Response
+    public function cancel(UserCMS $user, RegistrationCMS $registration): Response
     {
         return $user->id === $registration->user_id
             ? Response::allow()
@@ -73,11 +57,10 @@ class RegistrationPolicyCMS
     }
 
     /**
-     * Only the event owner (organizer) or admin can approve a registration.
+     * Only the event owner can approve a registration.
      */
-    public function approve(User $user, Registration $registration): Response
+    public function approve(UserCMS $user, RegistrationCMS $registration): Response
     {
-        // Ensure event relationship is loaded
         $registration->loadMissing('event');
 
         return $user->id === $registration->event->user_id
@@ -86,9 +69,9 @@ class RegistrationPolicyCMS
     }
 
     /**
-     * Only the event owner (organizer) or admin can decline a registration.
+     * Only the event owner can decline a registration.
      */
-    public function decline(User $user, Registration $registration): Response
+    public function decline(UserCMS $user, RegistrationCMS $registration): Response
     {
         $registration->loadMissing('event');
 

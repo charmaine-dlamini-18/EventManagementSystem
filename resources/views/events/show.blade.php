@@ -20,7 +20,7 @@
             <div class="h-2 bg-green-600"></div>
             <div class="px-6 py-5">
 
-                <!-- Status + Actions Row -->
+           
                 <div class="flex justify-between items-start mb-4">
                     <span class="px-3 py-1 text-sm font-medium rounded-full
                         @if($event->status === 'published') bg-green-100 text-green-700
@@ -106,7 +106,7 @@
             @auth
                 @if($event->status === 'published')
                     @php
-                        $userRegistration = \App\Models\Registration::where('user_id', auth()->id())
+                        $userRegistration = \App\Models\RegistrationCMS::where('user_id', auth()->id())
                             ->where('event_id', $event->id)->first();
                         $isOrganizer = auth()->id() === $event->user_id;
                     @endphp

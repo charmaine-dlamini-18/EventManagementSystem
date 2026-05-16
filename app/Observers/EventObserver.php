@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Event;
+use App\Models\EventCMS;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -21,7 +21,7 @@ class EventObserver
      * Fires BEFORE a new event is saved for the first time.
      * Ensures status always defaults to 'draft' if not explicitly set.
      */
-    public function creating(Event $event): void
+    public function creating(EventCMS $event): void
     {
         if (empty($event->status)) {
             $event->status = 'draft';
@@ -32,7 +32,7 @@ class EventObserver
      * Fires AFTER a new event is successfully created.
      * Good place for logging or side-effects on creation.
      */
-    public function created(Event $event): void
+    public function created(EventCMS $event): void
     {
         Log::info('Event created', [
             'event_id'   => $event->id,
@@ -49,7 +49,7 @@ class EventObserver
      * Here we guard against reactivating a cancelled event
      * back to 'published' directly — it must go through 'draft' first.
      */
-    public function updating(Event $event): void
+    public function updating(EventCMS $event): void
     {
         // Prevent a cancelled event being set directly back to published
         if ($event->getOriginal('status') === 'cancelled' && $event->status === 'published') {
@@ -64,7 +64,7 @@ class EventObserver
      * Fires AFTER an existing event is successfully updated.
      * Logs which fields changed for auditing.
      */
-    public function updated(Event $event): void
+    public function updated(EventCMS $event): void
     {
         $changed = $event->getChanges(); // Fields that actually changed
         unset($changed['updated_at']); // Ignore timestamp noise
@@ -82,7 +82,7 @@ class EventObserver
      * Cancels all pending registrations so attendees aren't left in limbo.
      * (Confirmed attendees will be notified via EventControllerCMS::update)
      */
-    public function deleting(Event $event): void
+    public function deleting(EventCMS $event): void
     {
         // Cancel all pending registrations for this event before deletion
         $event->registrations()

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ControllerCMS;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class EmailVerificationPromptController extends Controller
+class EmailVerificationPromptControllerCMS extends ControllerCMS
 {
     /**
      * Display the email verification prompt.

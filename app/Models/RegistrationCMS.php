@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Registration extends Model
+class RegistrationCMS extends Model
 {
     protected $table = 'registrations';
 
@@ -19,12 +19,12 @@ class Registration extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(UserCMS::class, 'user_id');
     }
 
     public function event(): BelongsTo
     {
-        return $this->belongsTo(Event::class, 'event_id');
+        return $this->belongsTo(EventCMS::class, 'event_id');
     }
 
     // -------------------------------------------------------------------------

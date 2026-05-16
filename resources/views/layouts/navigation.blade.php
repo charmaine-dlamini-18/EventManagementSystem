@@ -22,9 +22,11 @@
                         {{ __('Calendar') }}
                     </x-nav-link>
                     @auth
-                        <x-nav-link :href="route('registrations.index')" :active="request()->routeIs('registrations.*')">
-                            {{ __('Registrations') }}
-                        </x-nav-link>
+                        @can('admin-only-cms')
+                            <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                                {{ __('Users') }}
+                            </x-nav-link>
+                        @endcan
                     @endauth
                 </div>
             </div>
@@ -96,7 +98,9 @@
             <x-responsive-nav-link :href="route('events.index')">Events</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('events.calendar')">Calendar</x-responsive-nav-link>
             @auth
-                <x-responsive-nav-link :href="route('registrations.index')">Registrations</x-responsive-nav-link>
+                @can('admin-only-cms')
+                    <x-responsive-nav-link :href="route('users.index')">Users</x-responsive-nav-link>
+                @endcan
             @endauth
         </div>
         @auth

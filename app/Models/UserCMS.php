@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class UserCMS extends Authenticatable
 {
     use Notifiable;
+
+    protected $table = 'users';
 
     protected $fillable = ['name', 'email', 'password', 'role'];
 
@@ -30,12 +32,12 @@ class User extends Authenticatable
 
     public function events(): HasMany
     {
-        return $this->hasMany(Event::class, 'user_id');
+        return $this->hasMany(EventCMS::class, 'user_id');
     }
 
     public function registrations(): HasMany
     {
-        return $this->hasMany(Registration::class, 'user_id');
+        return $this->hasMany(RegistrationCMS::class, 'user_id');
     }
 
     // -------------------------------------------------------------------------
@@ -139,7 +141,7 @@ class User extends Authenticatable
 
     /**
      * Returns true if the user can create and manage events.
-     * Kept for backward compatibility — prefer Gate::allows('manage-events').
+     * Kept for backward compatibility — prefer Gate::allows('manage-events-cms').
      */
     public function canCreateEvents(): bool
     {

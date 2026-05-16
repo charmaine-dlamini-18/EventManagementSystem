@@ -14,8 +14,39 @@
             <p class="text-green-100 mt-0.5">{{ Auth::user()->role_label }}</p>
         </div>
 
-        @if(in_array(Auth::user()->role, ['admin', 'organizer']))
-            {{-- Organizer / Admin Dashboard --}}
+        @php $role = Auth::user()->role; @endphp
+
+        @if($role === 'admin')
+            {{-- Admin Dashboard --}}
+
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['total_events'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Total Events</p>
+                </div>
+                <div class="bg-white rounded-xl border p-5 shadow-sm">
+                    <p class="text-2xl font-bold text-purple-600">{{ $stats['total_users'] }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Total Users</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border shadow-sm p-5">
+                <h2 class="text-base font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ route('users.index') }}" class="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition">
+                        Manage Users
+                    </a>
+                    <a href="{{ route('events.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        Browse Events
+                    </a>
+                    <a href="{{ route('events.calendar') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition">
+                        Calendar
+                    </a>
+                </div>
+            </div>
+
+        @elseif($role === 'organizer')
+            {{-- Organizer Dashboard --}}
 
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="bg-white rounded-xl border p-5 shadow-sm">

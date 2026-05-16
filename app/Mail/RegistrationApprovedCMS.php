@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Registration;
+use App\Models\RegistrationCMS;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,12 +11,12 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * RegistrationApproved
+ * RegistrationApprovedCMS
  *
  * Sent to an attendee when an organizer approves their registration.
  * Implements ShouldQueue so it's dispatched to the queue (non-blocking).
  */
-class RegistrationApproved extends Mailable implements ShouldQueue
+class RegistrationApprovedCMS extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -25,7 +25,7 @@ class RegistrationApproved extends Mailable implements ShouldQueue
      * The Registration model (with event + user loaded) is injected.
      */
     public function __construct(
-        public readonly Registration $registration
+        public readonly RegistrationCMS $registration
     ) {}
 
     /**

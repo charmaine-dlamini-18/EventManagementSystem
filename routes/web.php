@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardControllerCMS;
 use App\Http\Controllers\EventControllerCMS;
 use App\Http\Controllers\RegistrationControllerCMS;
+use App\Http\Controllers\UserControllerCMS;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('welcome'))->name('home');
@@ -12,13 +13,13 @@ Route::get('/events/calendar', [EventControllerCMS::class, 'calendar'])->name('e
 Route::get('/events/{event}', [EventControllerCMS::class, 'show'])->name('events.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardControllerCMS::class, 'index'])->name('dashboard');
 
-    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [\App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [\App\Http\Controllers\ProfileControllerCMS::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [\App\Http\Controllers\ProfileControllerCMS::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [\App\Http\Controllers\ProfileControllerCMS::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware('role:admin|organizer')->group(function () {
+    Route::middleware('role:organizer')->group(function () {
         Route::get('/events/create', [EventControllerCMS::class, 'create'])->name('events.create');
         Route::post('/events', [EventControllerCMS::class, 'store'])->name('events.store');
         Route::get('/events/{event}/edit', [EventControllerCMS::class, 'edit'])->name('events.edit');
@@ -31,9 +32,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/registrations', [RegistrationControllerCMS::class, 'index'])->name('registrations.index');
 
-    Route::middleware('role:admin|organizer')->group(function () {
+    Route::middleware('role:organizer')->group(function () {
         Route::post('/registrations/{registration}/approve', [RegistrationControllerCMS::class, 'approve'])->name('registrations.approve');
         Route::post('/registrations/{registration}/decline', [RegistrationControllerCMS::class, 'decline'])->name('registrations.decline');
+    });
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/users', [UserControllerCMS::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserControllerCMS::class, 'create'])->name('users.create');
+        Route::post('/users', [UserControllerCMS::class, 'store'])->name('users.store');
+        Route::get('/users/{user}', [UserControllerCMS::class, 'show'])->name('users.show');
+        Route::get('/users/{user}/edit', [UserControllerCMS::class, 'edit'])->name('users.edit');
+        Route::patch('/users/{user}', [UserControllerCMS::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserControllerCMS::class, 'destroy'])->name('users.destroy');
     });
 });
 

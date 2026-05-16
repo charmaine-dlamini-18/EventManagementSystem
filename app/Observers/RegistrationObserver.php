@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Registration;
+use App\Models\RegistrationCMS;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -17,7 +17,7 @@ class RegistrationObserver
      * Fires AFTER a new registration is created.
      * Logs the new registration for audit trail.
      */
-    public function created(Registration $registration): void
+    public function created(RegistrationCMS $registration): void
     {
         Log::info('New registration created', [
             'registration_id' => $registration->id,
@@ -31,7 +31,7 @@ class RegistrationObserver
      * Fires AFTER a registration status is updated.
      * Logs status transitions (pending → confirmed, pending → cancelled, etc.)
      */
-    public function updated(Registration $registration): void
+    public function updated(RegistrationCMS $registration): void
     {
         if ($registration->wasChanged('status')) {
             Log::info('Registration status changed', [
@@ -48,7 +48,7 @@ class RegistrationObserver
      * Fires BEFORE a registration is deleted (attendee cancels).
      * Logs the cancellation for the audit trail.
      */
-    public function deleting(Registration $registration): void
+    public function deleting(RegistrationCMS $registration): void
     {
         Log::info('Registration deleted (attendee cancelled)', [
             'registration_id' => $registration->id,

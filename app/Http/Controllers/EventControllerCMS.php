@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\EventUpdated;
-use App\Models\Event;
-use App\Models\Registration;
+use App\Mail\EventUpdatedCMS;
+use App\Models\EventCMS;
+use App\Models\RegistrationCMS;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,14 +18,14 @@ use Illuminate\View\View;
  * Authorization is delegated to EventPolicyCMS via $this->authorize().
  * Notifies confirmed attendees when an event is updated.
  */
-class EventControllerCMS extends Controller
+class EventControllerCMS extends ControllerCMS
 {
     /**
      * Display a paginated, filterable list of events.
      */
     public function index(Request $request): View
     {
-        $query = Event::with('user');
+        $query = EventCMS::with('user');
 
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -49,7 +49,7 @@ class EventControllerCMS extends Controller
      */
     public function create(): View
     {
-        $this->authorize('create', Event::class);
+        $this->authorize('create', EventCMS::class);
 
         return view('events.create');
     }
@@ -59,7 +59,7 @@ class EventControllerCMS extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->authorize('create', Event::class);
+        $this->authorize('create', EventCMS::class);
 
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
@@ -71,7 +71,7 @@ class EventControllerCMS extends Controller
             'status'      => 'required|in:draft,published',
         ]);
 
-        Event::create(array_merge($validated, ['user_id' => Auth::id()]));
+        EventCMS::create(array_merge($validated, ['user_id' => Auth::id()]));
 
         return redirect()->route('events.index')
             ->with('success', 'Event created successfully.');
@@ -80,13 +80,13 @@ class EventControllerCMS extends Controller
     /**
      * Display a single event and its registrations.
      */
-    public function show(Event $event): View
+    public function show(EventCMS $event): View
     {
         $this->authorize('view', $event);
 
         $event->load('user');
 
-        $registrations = Registration::where('event_id', $event->id)
+        $registrations = RegistrationCMS::where('event_id', $event->id)
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -97,7 +97,7 @@ class EventControllerCMS extends Controller
     /**
      * Show the edit form.
      */
-    public function edit(Event $event): View
+    public function edit(EventCMS $event): View
     {
         $this->authorize('update', $event);
 
@@ -110,7 +110,7 @@ class EventControllerCMS extends Controller
      * Emails are queued — they do not block the response.
      * Only sends notifications if meaningful fields changed.
      */
-    public function update(Request $request, Event $event): RedirectResponse
+    public function update(Request $request, EventCMS $event): RedirectResponse
     {
         $this->authorize('update', $event);
 
@@ -140,7 +140,7 @@ class EventControllerCMS extends Controller
 
             foreach ($confirmedRegistrations as $registration) {
                 Mail::to($registration->user->email)
-                    ->queue(new EventUpdated($event, $registration->user));
+                    ->queue(new EventUpdatedCMS($event, $registration->user));
             }
         }
 
@@ -151,7 +151,7 @@ class EventControllerCMS extends Controller
     /**
      * Delete the event.
      */
-    public function destroy(Event $event): RedirectResponse
+    public function destroy(EventCMS $event): RedirectResponse
     {
         $this->authorize('delete', $event);
 
@@ -166,7 +166,7 @@ class EventControllerCMS extends Controller
      */
     public function calendar(): View
     {
-        $events = Event::where('status', 'published')
+        $events = EventCMS::where('status', 'published')
             ->where('start_date', '>=', now())
             ->orderBy('start_date')
             ->get();

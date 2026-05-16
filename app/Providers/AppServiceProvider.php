@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Event;
-use App\Models\Registration;
+use App\Models\EventCMS;
+use App\Models\RegistrationCMS;
 use App\Observers\EventObserver;
 use App\Observers\RegistrationObserver;
 use App\Policies\EventPolicyCMS;
@@ -29,43 +29,43 @@ class AppServiceProvider extends ServiceProvider
     {
         // --- Observers ---
         // Automatically react to Eloquent model lifecycle events.
-        Event::observe(EventObserver::class);
-        Registration::observe(RegistrationObserver::class);
+        EventCMS::observe(EventObserver::class);
+        RegistrationCMS::observe(RegistrationObserver::class);
 
         // --- Policies ---
         // Maps models to their policy classes.
         // Laravel uses these automatically when $this->authorize() is called.
-        Gate::policy(Event::class, EventPolicyCMS::class);
-        Gate::policy(Registration::class, RegistrationPolicyCMS::class);
+        Gate::policy(EventCMS::class, EventPolicyCMS::class);
+        Gate::policy(RegistrationCMS::class, RegistrationPolicyCMS::class);
 
         // --- Gates ---
         // Simple boolean checks for role-based UI controls.
-        // Use in Blade: @can('manage-events') or in controllers: Gate::allows('manage-events')
+        // Use in Blade: @can('manage-events-cms') or in controllers: Gate::allows('manage-events-cms')
 
         /**
-         * Gate: 'manage-events'
-         * True for admins and organizers.
+         * Gate: 'manage-events-cms'
+         * True only for organizers.
          * Used to show/hide event create/edit/delete buttons in the UI.
          */
-        Gate::define('manage-events', function ($user) {
-            return in_array($user->role, ['admin', 'organizer']);
+        Gate::define('manage-events-cms', function ($user) {
+            return $user->role === 'organizer';
         });
 
         /**
-         * Gate: 'manage-registrations'
-         * True for admins and organizers.
+         * Gate: 'manage-registrations-cms'
+         * True only for organizers.
          * Used to show/hide the registration approval/decline panel.
          */
-        Gate::define('manage-registrations', function ($user) {
-            return in_array($user->role, ['admin', 'organizer']);
+        Gate::define('manage-registrations-cms', function ($user) {
+            return $user->role === 'organizer';
         });
 
         /**
-         * Gate: 'admin-only'
+         * Gate: 'admin-only-cms'
          * True only for admins.
          * Use to protect admin-only dashboard sections.
          */
-        Gate::define('admin-only', function ($user) {
+        Gate::define('admin-only-cms', function ($user) {
             return $user->role === 'admin';
         });
     }

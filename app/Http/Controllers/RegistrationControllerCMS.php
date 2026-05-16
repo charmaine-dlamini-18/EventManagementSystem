@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewRegistrationReceived;
-use App\Mail\RegistrationApproved;
-use App\Mail\RegistrationDeclined;
-use App\Models\Event;
-use App\Models\Registration;
+use App\Mail\NewRegistrationReceivedCMS;
+use App\Mail\RegistrationApprovedCMS;
+use App\Mail\RegistrationDeclinedCMS;
+use App\Models\EventCMS;
+use App\Models\RegistrationCMS;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -19,26 +19,29 @@ use Illuminate\View\View;
  * Authorization is delegated to RegistrationPolicyCMS via $this->authorize().
  * Email notifications are queued (non-blocking) via Laravel Mail + ShouldQueue.
  */
-class RegistrationControllerCMS extends Controller
+class RegistrationControllerCMS extends ControllerCMS
 {
     /**
      * Show registrations list.
-     * - Attendees see their own registrations.
-     * - Organizers/Admins see registrations for events they own.
+     * - Admin sees all registrations.
+     * - Organizers see registrations for their own events.
+     * - Attendees see only their own registrations.
      */
     public function index(): View
     {
         $user = Auth::user();
 
-        if (in_array($user->role, ['admin', 'organizer'])) {
-            // Organizers see registrations for their events
-            $registrations = Registration::with(['event', 'user'])
+        if ($user->role === 'admin') {
+            $registrations = RegistrationCMS::with(['event', 'user'])
+                ->orderBy('created_at', 'desc')
+                ->paginate(15);
+        } elseif ($user->role === 'organizer') {
+            $registrations = RegistrationCMS::with(['event', 'user'])
                 ->whereHas('event', fn($q) => $q->where('user_id', $user->id))
                 ->orderBy('created_at', 'desc')
                 ->paginate(15);
         } else {
-            // Attendees see only their own registrations
-            $registrations = Registration::with('event')
+            $registrations = RegistrationCMS::with('event')
                 ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->paginate(15);
@@ -51,14 +54,14 @@ class RegistrationControllerCMS extends Controller
      * Register the authenticated user for an event.
      * Notifies the organizer via email after successful registration.
      */
-    public function store(Event $event): RedirectResponse
+    public function store(EventCMS $event): RedirectResponse
     {
-        $this->authorize('register', [Registration::class, $event]);
+        $this->authorize('register', [RegistrationCMS::class, $event]);
 
         $user = Auth::user();
 
         // Friendly duplicate check (DB unique constraint is the safety net)
-        $alreadyRegistered = Registration::where('user_id', $user->id)
+        $alreadyRegistered = RegistrationCMS::where('user_id', $user->id)
             ->where('event_id', $event->id)
             ->exists();
 
@@ -68,7 +71,7 @@ class RegistrationControllerCMS extends Controller
 
         // Check capacity
         if ($event->capacity) {
-            $confirmedCount = Registration::where('event_id', $event->id)
+            $confirmedCount = RegistrationCMS::where('event_id', $event->id)
                 ->where('status', 'confirmed')
                 ->count();
 
@@ -77,7 +80,7 @@ class RegistrationControllerCMS extends Controller
             }
         }
 
-        $registration = Registration::create([
+        $registration = RegistrationCMS::create([
             'user_id'  => $user->id,
             'event_id' => $event->id,
             'status'   => 'pending',
@@ -88,7 +91,7 @@ class RegistrationControllerCMS extends Controller
 
         // Notify the organizer a new attendee has registered
         Mail::to($registration->event->user->email)
-            ->queue(new NewRegistrationReceived($registration));
+            ->queue(new NewRegistrationReceivedCMS($registration));
 
         return redirect()->route('events.show', $event)
             ->with('success', 'Registered! Awaiting organizer approval.');
@@ -97,9 +100,9 @@ class RegistrationControllerCMS extends Controller
     /**
      * Cancel (unregister) the authenticated user's registration.
      */
-    public function unregister(Event $event): RedirectResponse
+    public function unregister(EventCMS $event): RedirectResponse
     {
-        $registration = Registration::where('user_id', Auth::id())
+        $registration = RegistrationCMS::where('user_id', Auth::id())
             ->where('event_id', $event->id)
             ->firstOrFail();
 
@@ -114,7 +117,7 @@ class RegistrationControllerCMS extends Controller
      * Approve a registration.
      * Sends a confirmation email to the attendee.
      */
-    public function approve(Registration $registration): RedirectResponse
+    public function approve(RegistrationCMS $registration): RedirectResponse
     {
         $this->authorize('approve', $registration);
 
@@ -122,7 +125,7 @@ class RegistrationControllerCMS extends Controller
 
         // Enforce capacity before approving
         if ($registration->event->capacity) {
-            $confirmedCount = Registration::where('event_id', $registration->event_id)
+            $confirmedCount = RegistrationCMS::where('event_id', $registration->event_id)
                 ->where('status', 'confirmed')
                 ->count();
 
@@ -135,7 +138,7 @@ class RegistrationControllerCMS extends Controller
 
         // Notify the attendee their registration was approved
         Mail::to($registration->user->email)
-            ->queue(new RegistrationApproved($registration));
+            ->queue(new RegistrationApprovedCMS($registration));
 
         return back()->with('success', 'Registration approved. Attendee notified by email.');
     }
@@ -144,7 +147,7 @@ class RegistrationControllerCMS extends Controller
      * Decline a registration.
      * Sends a decline notification email to the attendee.
      */
-    public function decline(Registration $registration): RedirectResponse
+    public function decline(RegistrationCMS $registration): RedirectResponse
     {
         $this->authorize('decline', $registration);
 
@@ -154,7 +157,7 @@ class RegistrationControllerCMS extends Controller
 
         // Notify the attendee their registration was declined
         Mail::to($registration->user->email)
-            ->queue(new RegistrationDeclined($registration));
+            ->queue(new RegistrationDeclinedCMS($registration));
 
         return back()->with('success', 'Registration declined. Attendee notified by email.');
     }

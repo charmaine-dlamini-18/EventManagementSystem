@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Registration;
+use App\Models\RegistrationCMS;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,30 +11,29 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * NewRegistrationReceived
+ * RegistrationDeclinedCMS
  *
- * Sent to the event organizer when a new attendee registers for their event.
- * Lets the organizer know there's a pending registration awaiting their action.
+ * Sent to an attendee when an organizer declines their registration.
  */
-class NewRegistrationReceived extends Mailable implements ShouldQueue
+class RegistrationDeclinedCMS extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     public function __construct(
-        public readonly Registration $registration
+        public readonly RegistrationCMS $registration
     ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🔔 New Registration for: ' . $this->registration->event->title,
+            subject: '❌ Registration Declined: ' . $this->registration->event->title,
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.registrations.new-registration',
+            view: 'emails.registrations.declined',
         );
     }
 
