@@ -66,8 +66,8 @@ class EventObserver
      */
     public function updated(EventCMS $event): void
     {
-        $changed = $event->getChanges(); // Fields that actually changed
-        unset($changed['updated_at']); // Ignore timestamp noise
+        $changed = $event->getChanges();
+        unset($changed['updated_at']);
 
         if (! empty($changed)) {
             Log::info('Event updated', [
@@ -84,7 +84,6 @@ class EventObserver
      */
     public function deleting(EventCMS $event): void
     {
-        // Cancel all pending registrations for this event before deletion
         $event->registrations()
             ->where('status', 'pending')
             ->update(['status' => 'cancelled']);
@@ -94,4 +93,5 @@ class EventObserver
             'title'    => $event->title,
         ]);
     }
+
 }

@@ -26,6 +26,12 @@ class NewPasswordControllerCMS extends ControllerCMS
             'token' => ['required'],
             'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'token.required'        => 'The password reset token is required.',
+            'email.required'        => 'An email address is required.',
+            'email.email'           => 'Please enter a valid email address.',
+            'password.required'     => 'Please enter a password.',
+            'password.confirmed'    => 'Password confirmation does not match.',
         ]);
 
         $status = Password::reset(

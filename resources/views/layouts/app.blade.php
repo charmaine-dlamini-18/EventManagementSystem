@@ -15,13 +15,6 @@
         <div class="min-h-screen">
             @include('layouts.navigation')
             
-            @if(session('success'))
-            <div class="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8">
-                <div class="bg-green-500 text-white px-4 py-3 rounded-lg font-medium" role="alert">
-                    SUCCESS: {{ session('success') }}
-                </div>
-            </div>
-            @endif
             
             @if(session('error'))
             <div class="max-w-7xl mx-auto mt-4 px-4 sm:px-6 lg:px-8">

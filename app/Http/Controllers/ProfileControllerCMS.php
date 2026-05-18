@@ -35,6 +35,9 @@ class ProfileControllerCMS extends ControllerCMS
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
+        ], [
+            'password.required'        => 'Please enter your password.',
+            'password.current_password' => 'Your password is incorrect.',
         ]);
 
         $user = $request->user();

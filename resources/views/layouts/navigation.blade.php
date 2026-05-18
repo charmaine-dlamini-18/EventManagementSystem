@@ -57,6 +57,7 @@
                     </x-dropdown>
 
                     <!-- User Menu -->
+                    <?php $user = Auth::user(); ?>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="flex items-center gap-2 p-1.5 hover:bg-gray-100 rounded-lg transition">

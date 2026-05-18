@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\EventUpdatedCMS;
 use App\Models\EventCMS;
 use App\Models\RegistrationCMS;
+use App\Rules\FutureDate;
+use App\Rules\ValidEventStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,13 +64,27 @@ class EventControllerCMS extends ControllerCMS
         $this->authorize('create', EventCMS::class);
 
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'required|string',
-            'location'    => 'required|string|max:255',
-            'start_date'  => 'required|date|after:now',
-            'end_date'    => 'required|date|after:start_date',
-            'capacity'    => 'nullable|integer|min:1',
-            'status'      => 'required|in:draft,published',
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'location'    => ['required', 'string', 'max:255'],
+            'start_date'  => ['required', 'date', new FutureDate],
+            'end_date'    => ['required', 'date', 'after:start_date'],
+            'capacity'    => ['nullable', 'integer', 'min:1'],
+            'status'      => ['required', new ValidEventStatus],
+        ], [
+            'title.required'       => 'An event title is required.',
+            'title.max'            => 'Title must not exceed :max characters.',
+            'description.required' => 'Please provide an event description.',
+            'location.required'    => 'Please provide an event location.',
+            'location.max'         => 'Location must not exceed :max characters.',
+            'start_date.required'  => 'Please select a start date.',
+            'start_date.date'      => 'Start date must be a valid date.',
+            'end_date.required'    => 'Please select an end date.',
+            'end_date.date'        => 'End date must be a valid date.',
+            'end_date.after'       => 'End date must be after the start date.',
+            'capacity.integer'     => 'Capacity must be a whole number.',
+            'capacity.min'         => 'Capacity must be at least :min.',
+            'status.required'      => 'Please select an event status.',
         ]);
 
         EventCMS::create(array_merge($validated, ['user_id' => Auth::id()]));
@@ -115,13 +131,27 @@ class EventControllerCMS extends ControllerCMS
         $this->authorize('update', $event);
 
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'required|string',
-            'location'    => 'required|string|max:255',
-            'start_date'  => 'required|date',
-            'end_date'    => 'required|date|after:start_date',
-            'capacity'    => 'nullable|integer|min:1',
-            'status'      => 'required|in:draft,published,cancelled',
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'location'    => ['required', 'string', 'max:255'],
+            'start_date'  => ['required', 'date'],
+            'end_date'    => ['required', 'date', 'after:start_date'],
+            'capacity'    => ['nullable', 'integer', 'min:1'],
+            'status'      => ['required', new ValidEventStatus],
+        ], [
+            'title.required'       => 'An event title is required.',
+            'title.max'            => 'Title must not exceed :max characters.',
+            'description.required' => 'Please provide an event description.',
+            'location.required'    => 'Please provide an event location.',
+            'location.max'         => 'Location must not exceed :max characters.',
+            'start_date.required'  => 'Please select a start date.',
+            'start_date.date'      => 'Start date must be a valid date.',
+            'end_date.required'    => 'Please select an end date.',
+            'end_date.date'        => 'End date must be a valid date.',
+            'end_date.after'       => 'End date must be after the start date.',
+            'capacity.integer'     => 'Capacity must be a whole number.',
+            'capacity.min'         => 'Capacity must be at least :min.',
+            'status.required'      => 'Please select an event status.',
         ]);
 
         // Track which fields changed to decide if attendees should be notified

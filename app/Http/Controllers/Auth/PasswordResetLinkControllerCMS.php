@@ -19,6 +19,9 @@ class PasswordResetLinkControllerCMS extends ControllerCMS
     {
         $request->validate([
             'email' => ['required', 'email'],
+        ], [
+            'email.required' => 'An email address is required.',
+            'email.email'    => 'Please enter a valid email address.',
         ]);
 
         $status = Password::sendResetLink(

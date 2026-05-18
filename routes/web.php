@@ -10,9 +10,8 @@ Route::get('/', fn() => view('welcome'))->name('home');
 
 Route::get('/events', [EventControllerCMS::class, 'index'])->name('events.index');
 Route::get('/events/calendar', [EventControllerCMS::class, 'calendar'])->name('events.calendar');
-Route::get('/events/{event}', [EventControllerCMS::class, 'show'])->name('events.show');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'log.requests'])->group(function () {
     Route::get('/dashboard', [DashboardControllerCMS::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [\App\Http\Controllers\ProfileControllerCMS::class, 'edit'])->name('profile.edit');
@@ -47,5 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/users/{user}', [UserControllerCMS::class, 'destroy'])->name('users.destroy');
     });
 });
+
+Route::get('/events/{event}', [EventControllerCMS::class, 'show'])->name('events.show');
 
 require __DIR__.'/auth.php';

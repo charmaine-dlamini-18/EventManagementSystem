@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $organizer = UserCMS::create([
-            'name' => 'Sarah Johnson',
-            'email' => 'sarah@example.com',
+            'name' => 'Charmaine Dlamini',
+            'email' => 'charmaine@example.com',
             'password' => bcrypt('password'),
             'role' => 'organizer',
         ]);
