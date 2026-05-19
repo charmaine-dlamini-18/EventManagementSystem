@@ -28,4 +28,16 @@ class ProfileUpdateRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Please provide your name.',
+            'name.max'      => 'Name must not exceed :max characters.',
+            'email.required' => 'An email address is required.',
+            'email.email'    => 'Please enter a valid email address.',
+            'email.unique'   => 'This email is already in use.',
+            'email.max'      => 'Email must not exceed :max characters.',
+        ];
+    }
 }

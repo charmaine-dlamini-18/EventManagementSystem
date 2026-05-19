@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserCMS;
+use App\Rules\ValidRole;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +46,17 @@ class UserControllerCMS extends ControllerCMS
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6'],
-            'role'     => ['required', Rule::in($this->roles())],
+            'role'     => ['required', new ValidRole],
+        ], [
+            'name.required'     => 'Please provide a name.',
+            'name.max'          => 'Name must not exceed :max characters.',
+            'email.required'    => 'An email address is required.',
+            'email.email'       => 'Please enter a valid email address.',
+            'email.unique'      => 'This email is already registered.',
+            'email.max'         => 'Email must not exceed :max characters.',
+            'password.required' => 'Please enter a password.',
+            'password.min'      => 'Password must be at least :min characters.',
+            'role.required'     => 'Please select a role.',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -81,11 +92,21 @@ class UserControllerCMS extends ControllerCMS
         $validated = $request->validate([
             'name'  => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'role'  => ['required', Rule::in($this->roles())],
+            'role'  => ['required', new ValidRole],
+        ], [
+            'name.required'     => 'Please provide a name.',
+            'name.max'          => 'Name must not exceed :max characters.',
+            'email.required'    => 'An email address is required.',
+            'email.email'       => 'Please enter a valid email address.',
+            'email.unique'      => 'This email is already in use.',
+            'email.max'         => 'Email must not exceed :max characters.',
+            'role.required'     => 'Please select a role.',
         ]);
 
         if ($request->filled('password')) {
-            $request->validate(['password' => ['string', 'min:6']]);
+            $request->validate(['password' => ['string', 'min:6']], [
+                'password.min' => 'Password must be at least :min characters.',
+            ]);
             $validated['password'] = Hash::make($request->password);
         }
 
