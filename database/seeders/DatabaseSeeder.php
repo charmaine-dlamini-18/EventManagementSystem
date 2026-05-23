@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
         $attendeeData = [
             ['name' => 'Amanda Buthelezi',   'email' => 'amanda@example.com'],
-            ['name' => 'Emma Kabala',   'email' => 'emma@example.com'],
+            ['name' => 'Marc Kabala',   'email' => 'marc@example.com'],
             ['name' => 'Siphokazi Tembe',  'email' => 'siphokazi@example.com'],
             ['name' => 'Lisa Dlamini',   'email' => 'lisa@example.com'],
             ['name' => 'James Bond', 'email' => 'james@example.com'],
@@ -62,6 +62,16 @@ class DatabaseSeeder extends Seeder
                 'start_date' => $now->copy()->addDays(30)->setHour(9)->setMinute(0),
                 'end_date' => $now->copy()->addDays(30)->setHour(17)->setMinute(0),
                 'capacity' => 200,
+                'status' => 'published',
+            ]),
+            EventCMS::create([
+                'user_id' => $organizer->id,
+                'title' => 'Hackaton 2026',
+                'description' => '48-hour coding marathon where teams compete to build innovative solutions. Open to all skill levels.',
+                'location' => 'District six, Engineering building',
+                'start_date' => $now->copy()->addDays(60)->setHour(18)->setMinute(0),
+                'end_date' => $now->copy()->addDays(60)->setHour(22)->setMinute(0),
+                'capacity' => 500,
                 'status' => 'published',
             ]),
             EventCMS::create([
@@ -113,11 +123,13 @@ class DatabaseSeeder extends Seeder
                     ->exists();
 
                 if (!$exists) {
+                    $status = $statuses[array_rand($statuses)];
+
                     RegistrationCMS::create([
                         'user_id' => $attendee->id,
                         'event_id' => $event->id,
-                        'status' => $statuses[array_rand($statuses)],
-                        'notes' => rand(0, 1) ? 'Looking forward to this event!' : null,
+                        'status' => $status,
+                        'notes' => $status === 'cancelled' ? null : (rand(0, 1) ? 'Looking forward to this event!' : null),
                     ]);
                 }
             }
