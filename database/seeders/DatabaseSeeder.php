@@ -104,6 +104,16 @@ class DatabaseSeeder extends Seeder
                 'capacity' => null,
                 'status' => 'draft',
             ]),
+            EventCMS::create([
+                'user_id' => $organizer->id,
+                'title' => 'Innovation Hackathon 2026',
+                'description' => '48-hour sprint focused on AI, IoT, and sustainability projects. Mentors from local startups will be onsite. Open to all skill levels.',
+                'location' => 'Bandwidth Barn, Woodstock',
+                'start_date' => $now->copy()->addDays(84)->setHour(10)->setMinute(0),
+                'end_date' => $now->copy()->addDays(86)->setHour(10)->setMinute(0),
+                'capacity' => 100,
+                'status' => 'published',
+            ]),
         ];
 
         $statuses = ['pending', 'confirmed', 'cancelled'];
