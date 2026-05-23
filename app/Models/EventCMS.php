@@ -86,7 +86,7 @@ class EventCMS extends Model
     public function scopeWithAvailability(Builder $query): Builder
     {
         return $query->where(function (Builder $q) {
-            // No capacity limit set — always available
+            // No capacity limit set — always available.
             $q->whereNull('capacity')
               // OR confirmed registrations are under capacity
               ->orWhereRaw(
