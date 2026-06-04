@@ -2,12 +2,47 @@
 
 A role-based web application for creating, managing, and registering for events. Built with Laravel 12, this platform supports three user roles — **Admin**, **Organizer**, and **Attendee** — each with distinct permissions.
 
+---
+
+## 📖 Project Overview
+
+The Event Management System (EMS) is designed to streamline the process of organizing and attending events. Organizers can create and manage events, attendees can browse and register for events, and administrators can oversee users, events, and registrations across the system.
+
+---
+
+## ✨ Features
+
+### 👨‍💼 Admin
+- Manage users (Create, Read, Update, Delete)
+- View all events in the system
+- View all registrations
+- Access system statistics dashboard
+- Create administrator accounts
+
+### 🎤 Organizer
+- Create, edit, and delete events
+- Publish or save events as drafts
+- View registrations for owned events
+- Approve or decline registrations
+- Access event statistics dashboard
+- Receive notifications when attendees register
+
+### 👥 Attendee
+- Browse published events
+- Register for events
+- View registration status
+- Cancel registrations
+- Receive email notifications
+- Access personal dashboard
+
+---
+
 ## Technologies Used
 
 | Technology | Version |
 |---|---|
-| **PHP** | ^8.4 |
-| **Laravel** | ^12 |
+| **PHP** | ^8.3 |
+| **Laravel** | ^13.0 |
 | **MySQL** | — |
 | **Node.js / npm** | — |
 | **Vite** | ^8.0 |
