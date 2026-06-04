@@ -142,3 +142,72 @@ http://127.0.0.1:8000
 Open the URL in your browser.
 
 > ⚠️ Make sure Apache and MySQL are running in XAMPP before opening the application.
+
+---
+
+## 🔑 Demo Accounts
+
+You can use these demo accounts to login
+
+| Role | Email | Password |
+|--------|---------|----------|
+| Admin | admin@example.com | password |
+| Organizer | charmaine@example.com | password |
+| Attendee | lisa@example.com | password |
+
+
+---
+## Usage Guide
+
+### User Registration
+
+1. Navigate to `/register`.
+2. Fill in your **name**, **email**, **password**, and select a **role** (`attendee` or `organizer`).
+3. Submit the form to create your account.
+4. Log in at `/login` with your credentials.
+
+> Admin accounts can only be created by an existing admin via the **Admin Panel** (`/users/create`).
+
+### Roles & Permissions
+
+| Feature | Admin | Organizer | Attendee |
+|---|---|---|---|
+| Browse events | ✅ | ✅ | ✅ |
+| Register for events | ❌ | ❌ | ✅ |
+| Create / edit / delete own events | ❌ | ✅ | ❌ |
+| Approve / decline registrations | ❌ | ✅ (own events) | ❌ |
+| Manage users (CRUD) | ✅ | ❌ | ❌ |
+| View dashboard | ✅ (system stats) | ✅ (event stats) | ✅ (my registrations) |
+
+### Posting & Managing Events (Organizer)
+
+1. Log in as an **organizer**.
+2. Go to **Events** → **Create Event** (`/events/create`).
+3. Fill in the event details:
+   - **Title**, **Description**, **Location**
+   - **Start Date / End Date**
+   - **Capacity** (leave blank for unlimited)
+   - **Status** (`draft` or `published`)
+4. Submit to create the event.
+5. From the event list (`/events`), you can **edit**, **delete**, or **view** registrations for your events.
+6. Approve or decline pending registrations from the event details page.
+
+### Registering for Events (Attendee)
+
+1. Log in as an **attendee**.
+2. Browse published events on the **Events** page (`/events`).
+3. Click **Register** on any event with available capacity.
+4. Your registration status will show as **Pending** until the organizer approves it.
+5. Once approved, the status changes to **Confirmed** — you'll receive an email notification.
+6. You can cancel your own registration at any time.
+
+### Administrative Functions (Admin)
+
+1. Log in as **admin** (`admin@example.com` / `password`).
+2. **Dashboard** (`/dashboard`) — view total events and users.
+3. **Users** (`/users`) — view, create, edit, and delete user accounts.
+4. **Events** (`/events`) — view all events across all organizers.
+5. **Registrations** (`/registrations`) — view all registrations system-wide.
+
+
+---
