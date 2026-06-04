@@ -42,7 +42,7 @@ The Event Management System (EMS) is designed to streamline the process of organ
 | Technology | Version |
 |---|---|
 | **PHP** | ^8.3 |
-| **Laravel** | ^13.0 |
+| **Laravel** | ^12 |
 | **MySQL** | — |
 | **Node.js / npm** | — |
 | **Vite** | ^8.0 |
@@ -50,6 +50,47 @@ The Event Management System (EMS) is designed to streamline the process of organ
 | **Alpine.js** | ^3.15 |
 | **Laravel Breeze** (Blade + Alpine) | — |
 | **Pest PHP** (testing) | — |
-| **Laravel Pint** (code style) | — |
 
 ---
+
+## 🚀 Installation & Setup
+
+### Prerequisites
+
+Make sure the following are installed:
+
+- PHP ^8.4
+- Composer
+- Node.js and npm
+- MySQL Server
+- XAMPP
+
+### Step 1: Start XAMPP
+
+Before running the project, start:
+
+- Apache
+- MySQL
+
+from the XAMPP Control Panel.
+
+### Step 2: Clone the Repository
+
+Open VS Code and clone the repository:
+
+```bash
+git clone <repository-url>
+cd EMS
+```
+
+### Step 3: Install PHP Dependencies
+
+```bash
+composer install
+```
+
+### Step 4: Create the Environment File
+
+```bash
+copy .env.example .env
+```
