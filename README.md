@@ -168,16 +168,6 @@ You can use these demo accounts to login
 
 > Admin accounts can only be created by an existing admin via the **Admin Panel** (`/users/create`).
 
-### Roles & Permissions
-
-| Feature | Admin | Organizer | Attendee |
-|---|---|---|---|
-| Browse events | ✅ | ✅ | ✅ |
-| Register for events | ❌ | ❌ | ✅ |
-| Create / edit / delete own events | ❌ | ✅ | ❌ |
-| Approve / decline registrations | ❌ | ✅ (own events) | ❌ |
-| Manage users (CRUD) | ✅ | ❌ | ❌ |
-| View dashboard | ✅ (system stats) | ✅ (event stats) | ✅ (my registrations) |
 
 ### Posting & Managing Events (Organizer)
 
@@ -209,5 +199,33 @@ You can use these demo accounts to login
 4. **Events** (`/events`) — view all events across all organizers.
 5. **Registrations** (`/registrations`) — view all registrations system-wide.
 
+---
+
+## Project Structure
+
+```
+app/
+├── Http/Controllers/     # Controllers (CMS suffix)
+│   ├── Auth/             # Authentication controllers
+│   ├── DashboardControllerCMS.php
+│   ├── EventControllerCMS.php
+│   ├── ProfileControllerCMS.php
+│   ├── RegistrationControllerCMS.php
+│   └── UserControllerCMS.php
+├── Http/Middleware/       # RoleMiddleware, LogRequestsMiddleware
+├── Mail/                  # Queued email notifications
+├── Models/                # EventCMS, RegistrationCMS, UserCMS
+├── Observers/             # EventObserver, RegistrationObserver
+├── Policies/              # EventPolicyCMS, RegistrationPolicyCMS
+├── Rules/                 # FutureDate, ValidEventStatus, ValidRole
+└── View/Components/       # Blade components
+database/
+├── migrations/            # Table definitions
+└── seeders/               # Demo data
+resources/views/           # Blade templates
+routes/web.php             # Web routes
+routes/auth.php            # Auth routes
+tests/                     # Pest PHP tests
+```
 
 ---
