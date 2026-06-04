@@ -94,3 +94,51 @@ composer install
 ```bash
 copy .env.example .env
 ```
+### Step 6: Configure the Database
+
+Open the `.env` file and update the database settings:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=event_management_system
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Create the database in phpMyAdmin and then run:
+
+```bash
+php artisan migrate --seed
+```
+
+### Step 7: Install Frontend Dependencies
+
+```bash
+npm install
+```
+
+### Step 8: Start Vite
+
+```bash
+npm run dev
+```
+
+### Step 9: Start the Laravel Server
+
+Open a **new terminal** and run:
+
+```bash
+php artisan serve
+```
+
+You should see something similar to:
+
+```text
+http://127.0.0.1:8000
+```
+
+Open the URL in your browser.
+
+> ⚠️ Make sure Apache and MySQL are running in XAMPP before opening the application.
