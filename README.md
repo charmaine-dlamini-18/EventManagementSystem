@@ -229,3 +229,28 @@ tests/                     # Pest PHP tests
 ```
 
 ---
+
+## 🔒 Security & Authorization
+
+The application implements:
+
+- Laravel Authentication
+- Role-Based Access Control (RBAC)
+- Policies for authorization
+- Custom validation rules
+- CSRF protection
+- Secure password hashing
+
+---
+
+## 👨‍💻 Development Team
+
+Developed as part of an academic software development project.
+
+### Team Members
+
+- Ceza Sabelo
+- Dlamini Charmaine
+- Kabala Marc
+
+---
