@@ -29,12 +29,13 @@ class ProfileControllerCMS extends ControllerCMS
         }
            // Save the updated information.
         $request->user()->save();
-
+            // Return to the profile page with a success message.
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     public function destroy(Request $request): RedirectResponse
     {
+        // Check if the correct password was entered.
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ], [
@@ -43,14 +44,16 @@ class ProfileControllerCMS extends ControllerCMS
         ]);
 
         $user = $request->user();
-
+        
+        // Log the user out.
         Auth::logout();
 
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
+        
+        // Redirect to the home page.
         return Redirect::to('/');
     }
 }
