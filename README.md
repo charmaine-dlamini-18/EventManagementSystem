@@ -164,7 +164,7 @@ You can use these demo accounts to login
 ### User Registration
 
 1. Navigate to `/register`.
-2. Fill in your **name**, **email**, **password**, and select a **role** as an (`attendee`).
+2. Fill in your **name**, **email**, **password**, and select a **role** as an (`attendee` or `organizer`).
 3. Submit the form to create your account.
 4. It will direct you to the login page.
 5. Log in at `/login` with your credentials.
@@ -174,19 +174,16 @@ You can use these demo accounts to login
 
 ### Posting & Managing Events (Organizer)
 
-1. Navigate to `/register`.
-2. Fill in your **name**, **email**, **password**, and select a **role** as an  ( `organizer`).
-3. It will direct you to the login page.
-4. Log in as an **organizer**.
-5. Go to **Events** → **Create Event** (`/events/create`).
-6. Fill in the event details:
+1. Log in as an **organizer**.
+2. Go to **Events** → **Create Event** (`/events/create`).
+3. Fill in the event details:
    - **Title**, **Description**, **Location**
    - **Start Date / End Date**
    - **Capacity** (leave blank for unlimited)
    - **Status** (`draft` or `published`)
-7. Submit to create the event.
-8. From the event list (`/events`), you can **edit**, **delete**, or **view** registrations for your events.
-9. Approve or decline pending registrations from the event details page.
+4. Submit to create the event.
+5. From the event list (`/events`), you can **edit**, **delete**, or **view** registrations for your events.
+6. Approve or decline pending registrations from the event details page.
 
 ### Registering for Events (Attendee)
 
@@ -203,7 +200,6 @@ You can use these demo accounts to login
 2. **Dashboard** (`/dashboard`) — view total events and users.
 3. **Users** (`/users`) — view, create, edit, and delete user accounts.
 4. **Events** (`/events`) — view all events across all organizers.
-5. **Registrations** (`/registrations`) — view all registrations system-wide.
 
 ---
 
