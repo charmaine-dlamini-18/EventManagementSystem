@@ -61,7 +61,7 @@ The Event Management System (EMS) is designed to streamline the process of organ
 
 Make sure the following are installed:
 
-- PHP ^8.4
+- PHP ^8.3
 - Composer
 - Node.js and npm
 - MySQL Server
