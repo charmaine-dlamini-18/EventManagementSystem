@@ -158,6 +158,63 @@
                 to   { opacity: 1; transform: translateY(0)    scale(1);    }
             }
 
+             /* ── Buttons ── */
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                animation: slide-up 0.65s cubic-bezier(0.16,1,0.3,1) both;
+            }
+
+            .btn-primary {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.9rem 2rem;
+                background: #16a34a;
+                color: #fff;
+                font-family: 'Syne', sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+                letter-spacing: 0.03em;
+                border-radius: 12px;
+                text-decoration: none;
+                box-shadow: 0 4px 20px rgba(22,163,74,0.5);
+                transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+                border: none;
+            }
+            .btn-primary:hover {
+                background: #15803d;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 28px rgba(22,163,74,0.65);
+            }
+            .btn-primary:active {
+                transform: translateY(0);
+            }
+
+            .btn-secondary {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.9rem 2rem;
+                background: rgba(255,255,255,0.08);
+                color: rgba(255,255,255,0.75);
+                font-family: 'Syne', sans-serif;
+                font-weight: 700;
+                font-size: 1rem;
+                letter-spacing: 0.03em;
+                border-radius: 12px;
+                text-decoration: none;
+                border: 1px solid rgba(255,255,255,0.15);
+                transition: transform 0.15s, background 0.15s, color 0.15s;
+            }
+            .btn-secondary:hover {
+                background: rgba(255,255,255,0.13);
+                color: #fff;
+                transform: translateY(-2px);
+            }
 
 
         </style>
