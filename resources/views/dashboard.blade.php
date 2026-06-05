@@ -48,18 +48,14 @@
         @elseif($role === 'organizer')
             {{-- Organizer Dashboard --}}
 
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl border p-5 shadow-sm">
                     <p class="text-2xl font-bold text-gray-900">{{ $stats['my_events'] }}</p>
                     <p class="text-sm text-gray-500 mt-0.5">My Events</p>
                 </div>
                 <div class="bg-white rounded-xl border p-5 shadow-sm">
                     <p class="text-2xl font-bold text-gray-900">{{ $stats['upcoming_events'] }}</p>
-                    <p class="text-sm text-gray-500 mt-0.5">Upcoming</p>
-                </div>
-                <div class="bg-white rounded-xl border p-5 shadow-sm">
-                    <p class="text-2xl font-bold text-gray-900">{{ $stats['total_registrations'] }}</p>
-                    <p class="text-sm text-gray-500 mt-0.5">Total Registrations</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Upcoming Events</p>
                 </div>
                 <div class="bg-white rounded-xl border p-5 shadow-sm">
                     <p class="text-2xl font-bold text-green-600">{{ $stats['confirmed'] }}</p>
@@ -114,7 +110,7 @@
                 </div>
                 <div class="bg-white rounded-xl border p-5 shadow-sm">
                     <p class="text-2xl font-bold text-blue-600">{{ $stats['upcoming'] }}</p>
-                    <p class="text-sm text-gray-500 mt-0.5">Upcoming</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Upcoming Events</p>
                 </div>
             </div>
 

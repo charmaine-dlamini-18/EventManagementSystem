@@ -25,8 +25,8 @@ class UserControllerCMS extends ControllerCMS
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%');
+                $q->where('name', 'like', '%'.$search.'%')
+                  ->orWhere('email', 'like', '%'.$search.'%');
             });
         }
 
@@ -43,20 +43,20 @@ class UserControllerCMS extends ControllerCMS
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6'],
-            'role'     => ['required', new ValidRole],
+            'role' => ['required', new ValidRole()],
         ], [
-            'name.required'     => 'Please provide a name.',
-            'name.max'          => 'Name must not exceed :max characters.',
-            'email.required'    => 'An email address is required.',
-            'email.email'       => 'Please enter a valid email address.',
-            'email.unique'      => 'This email is already registered.',
-            'email.max'         => 'Email must not exceed :max characters.',
-            'password.required' => 'Please enter a password.',
-            'password.min'      => 'Password must be at least :min characters.',
-            'role.required'     => 'Please select a role.',
+            'name.required' => 'Please provide a name.',
+            'name.max' => 'Name must not exceed :max characters.',
+            'email.required' => 'An email address is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.unique' => 'This email is already registered.',
+            'email.max' => 'Email must not exceed :max characters.',
+            'password.required' => 'Please enter password.',
+            'password.min' => 'Password must be at least :min characters.',
+            'role.required' => 'Please select a role.',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -70,10 +70,10 @@ class UserControllerCMS extends ControllerCMS
     public function show(UserCMS $user): View
     {
         $stats = [
-            'events'        => $user->events()->count(),
+            'events' => $user->events()->count(),
             'registrations' => $user->registrations()->count(),
-            'confirmed'     => $user->registrations()->where('status', 'confirmed')->count(),
-            'pending'       => $user->registrations()->where('status', 'pending')->count(),
+            'confirmed' => $user->registrations()->where('status', 'confirmed')->count(),
+            'pending' => $user->registrations()->where('status', 'pending')->count(),
         ];
 
         return view('users.show', compact('user', 'stats'));
@@ -82,7 +82,7 @@ class UserControllerCMS extends ControllerCMS
     public function edit(UserCMS $user): View
     {
         return view('users.edit', [
-            'user'  => $user,
+            'user' => $user,
             'roles' => $this->roles(),
         ]);
     }
@@ -90,17 +90,17 @@ class UserControllerCMS extends ControllerCMS
     public function update(Request $request, UserCMS $user): RedirectResponse
     {
         $validated = $request->validate([
-            'name'  => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'role'  => ['required', new ValidRole],
+            'role' => ['required', new ValidRole()],
         ], [
-            'name.required'     => 'Please provide a name.',
-            'name.max'          => 'Name must not exceed :max characters.',
-            'email.required'    => 'An email address is required.',
-            'email.email'       => 'Please enter a valid email address.',
-            'email.unique'      => 'This email is already in use.',
-            'email.max'         => 'Email must not exceed :max characters.',
-            'role.required'     => 'Please select a role.',
+            'name.required' => 'Please provide a name.',
+            'name.max' => 'Name must not exceed :max characters.',
+            'email.required' => 'An email address is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.unique' => 'This email is already in use.',
+            'email.max' => 'Email must not exceed :max characters.',
+            'role.required' => 'Please select a role.',
         ]);
 
         if ($request->filled('password')) {

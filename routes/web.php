@@ -6,7 +6,7 @@ use App\Http\Controllers\RegistrationControllerCMS;
 use App\Http\Controllers\UserControllerCMS;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => view('welcome'))->name('home');
+Route::get('/', fn () => view('welcome'))->name('home');
 
 Route::get('/events', [EventControllerCMS::class, 'index'])->name('events.index');
 Route::get('/events/calendar', [EventControllerCMS::class, 'calendar'])->name('events.calendar');
@@ -14,9 +14,9 @@ Route::get('/events/calendar', [EventControllerCMS::class, 'calendar'])->name('e
 Route::middleware(['auth', 'verified', 'log.requests'])->group(function () {
     Route::get('/dashboard', [DashboardControllerCMS::class, 'index'])->name('dashboard');
 
-    Route::get('/profile', [\App\Http\Controllers\ProfileControllerCMS::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [\App\Http\Controllers\ProfileControllerCMS::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [\App\Http\Controllers\ProfileControllerCMS::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [App\Http\Controllers\ProfileControllerCMS::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileControllerCMS::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [App\Http\Controllers\ProfileControllerCMS::class, 'destroy'])->name('profile.destroy');
 
     Route::middleware('role:organizer')->group(function () {
         Route::get('/events/create', [EventControllerCMS::class, 'create'])->name('events.create');
