@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
+/**
+ * UserControllerCMS
+ *
+ * Handles user management functions such as creating, viewing,
+ * updating and searching.
+ * Validates user data, manages user roles and encrypts passwords.
+ */
+
 class UserControllerCMS extends ControllerCMS
 {
     private function roles(): array
