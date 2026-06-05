@@ -16,8 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RoleMiddleware
 {
+
+     //Verify that the user has permission to access the route.
+
     public function handle(Request $request, Closure $next, string $role): Response
     {
+         // Check if the user is logged in.
         if (!$request->user()) {
             return redirect()->route('login');
         }
