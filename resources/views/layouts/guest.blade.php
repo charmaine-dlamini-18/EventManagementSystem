@@ -91,6 +91,10 @@
                     0 24px 64px rgba(0,0,0,0.55);
                 animation: ems-slide-up 0.55s cubic-bezier(0.16,1,0.3,1) both;
             }
+            @keyframes ems-slide-up {
+                from { opacity: 0; transform: translateY(24px) scale(0.98); }
+                to   { opacity: 1; transform: translateY(0)    scale(1);    }
+            }
             
         </style>
     </head>
