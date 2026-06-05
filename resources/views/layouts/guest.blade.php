@@ -118,6 +118,15 @@
                 padding: 0.7rem 0.9rem !important;
                 transition: border-color 0.2s, background 0.2s, box-shadow 0.2s !important;
             }
+
+            .ems-card input::placeholder { color: rgba(255,255,255,0.25) !important; }
+            .ems-card input:focus,
+            .ems-card select:focus {
+                border-color: #4ade80 !important;
+                background: rgba(255,255,255,0.11) !important;
+                box-shadow: 0 0 0 3px rgba(74,222,128,0.2) !important;
+                outline: none !important;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
