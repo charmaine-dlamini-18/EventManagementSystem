@@ -34,6 +34,17 @@
                 height: 100%;
                 object-fit: cover;
             }
+            .ems-video-bg::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    135deg,
+                    rgba(0,0,0,0.78) 0%,
+                    rgba(5,30,10,0.72) 50%,
+                    rgba(0,0,0,0.85) 100%
+                );
+            }
 
         </style>
     </head>
