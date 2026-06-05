@@ -166,7 +166,8 @@ You can use these demo accounts to login
 1. Navigate to `/register`.
 2. Fill in your **name**, **email**, **password**, and select a **role** (`attendee` or `organizer`).
 3. Submit the form to create your account.
-4. Log in at `/login` with your credentials.
+4. It will direct you to the login page.
+5. Log in at `/login` with your credentials.
 
 > Admin accounts can only be created by an existing admin via the **Admin Panel** (`/users/create`).
 
