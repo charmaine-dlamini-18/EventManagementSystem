@@ -164,7 +164,7 @@ You can use these demo accounts to login
 ### User Registration
 
 1. Navigate to `/register`.
-2. Fill in your **name**, **email**, **password**, and select a **role** (`attendee` or `organizer`).
+2. Fill in your **name**, **email**, **password**, and select a **role** as an (`attendee`).
 3. Submit the form to create your account.
 4. It will direct you to the login page.
 5. Log in at `/login` with your credentials.
@@ -175,7 +175,7 @@ You can use these demo accounts to login
 ### Posting & Managing Events (Organizer)
 
 1. Navigate to `/register`.
-2. Fill in your **name**, **email**, **password**, and select a **role** (`attendee` or `organizer`).
+2. Fill in your **name**, **email**, **password**, and select a **role** as an  ( `organizer`).
 3. It will direct you to the login page.
 4. Log in as an **organizer**.
 5. Go to **Events** → **Create Event** (`/events/create`).
