@@ -136,6 +136,20 @@
                 background: #111827;
                 color: #fff;
             }
+
+             /* ── Checkbox ── */
+            .ems-card input[type="checkbox"] {
+                accent-color: #4ade80;
+                background: transparent !important;
+                border: 1px solid rgba(255,255,255,0.3) !important;
+                padding: 0 !important;
+                width: 15px !important;
+                height: 15px !important;
+            }
+            .ems-card label span,
+            .ems-card .ms-2 {
+                color: rgba(255,255,255,0.5) !important;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
