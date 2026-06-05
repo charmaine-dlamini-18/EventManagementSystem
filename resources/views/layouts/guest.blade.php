@@ -75,6 +75,22 @@
                 color: #fff;
                 letter-spacing: -0.03em;
             }
+
+            /* ── Card ── */
+            .ems-card {
+                width: 100%;
+                max-width: 448px;
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.13);
+                border-radius: 20px;
+                padding: 2.25rem 2rem;
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                box-shadow:
+                    0 0 0 1px rgba(255,255,255,0.04) inset,
+                    0 24px 64px rgba(0,0,0,0.55);
+                animation: ems-slide-up 0.55s cubic-bezier(0.16,1,0.3,1) both;
+            }
             
         </style>
     </head>
