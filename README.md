@@ -15,7 +15,6 @@ The Event Management System (EMS) is designed to streamline the process of organ
 ### 👨‍💼 Admin
 - Manage users (Create, Read, Update, Delete)
 - View all events in the system
-- View all registrations
 - Access system statistics dashboard
 - Create administrator accounts
 
