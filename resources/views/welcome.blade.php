@@ -22,6 +22,14 @@
                 overflow: hidden;
             }
 
+             /* ── Video background (identical to guest.blade) ── */
+            .ems-video-bg {
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                overflow: hidden;
+            }
+
         </style>
     </head>
     <body>
