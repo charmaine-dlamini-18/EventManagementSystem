@@ -154,7 +154,7 @@ You can use these demo accounts to login
 | Role | Email | Password |
 |--------|---------|----------|
 | Admin | admin@example.com | password |
-| Organizer | charmaine@example.com | password |
+| Organizer | lwandle@example.com | password |
 | Attendee | lisa@example.com | password |
 
 
