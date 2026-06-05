@@ -27,7 +27,8 @@ class RoleMiddleware
         }
 
         $allowedRoles = explode('|', $role);
-        
+
+           // Check if the user's role is allowed.
         if (!in_array($request->user()->role, $allowedRoles)) {
             abort(403, 'Unauthorized action.');
         }
