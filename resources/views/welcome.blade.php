@@ -29,6 +29,11 @@
                 z-index: 0;
                 overflow: hidden;
             }
+             .ems-video-bg video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
         </style>
     </head>
