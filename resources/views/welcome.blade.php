@@ -46,6 +46,19 @@
                 );
             }
 
+             /* ── Page layout ── */
+            .ems-page {
+                position: relative;
+                z-index: 10;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 1rem;
+                text-align: center;
+            }
+
         </style>
     </head>
     <body>
