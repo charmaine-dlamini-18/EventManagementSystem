@@ -96,6 +96,14 @@
                 to   { opacity: 1; transform: translateY(0)    scale(1);    }
             }
             
+            /* ── Override Breeze label colours ── */
+            .ems-card label,
+            .ems-card .block.text-sm.font-medium {
+                color: rgba(255,255,255,0.55) !important;
+                font-size: 0.76rem !important;
+                letter-spacing: 0.07em !important;
+                text-transform: uppercase !important;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
