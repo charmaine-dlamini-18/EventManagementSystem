@@ -104,6 +104,20 @@
                 letter-spacing: 0.07em !important;
                 text-transform: uppercase !important;
             }
+
+            /* ── Override Breeze text inputs ── */
+            .ems-card input[type="text"],
+            .ems-card input[type="email"],
+            .ems-card input[type="password"],
+            .ems-card select {
+                background: rgba(255,255,255,0.08) !important;
+                border: 1px solid rgba(255,255,255,0.15) !important;
+                border-radius: 10px !important;
+                color: #fff !important;
+                font-size: 0.92rem !important;
+                padding: 0.7rem 0.9rem !important;
+                transition: border-color 0.2s, background 0.2s, box-shadow 0.2s !important;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
