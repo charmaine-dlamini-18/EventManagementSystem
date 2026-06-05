@@ -6,6 +6,14 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * RoleMiddleware
+ *
+ * Controls access to routes based on user roles.
+ * Ensures that only authenticated users with the
+ * required role(s) can access protected pages.
+ * Users without permission are denied access.
+ */
 class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, string $role): Response
