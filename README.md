@@ -6,7 +6,7 @@ A role-based web application for creating, managing, and registering for events.
 
 ## 📖 Project Overview
 
-The Event Management System (EMS) is designed to streamline the process of organizing and attending events. Organizers can create and manage events, attendees can browse and register for events, and administrators can oversee users, events, and registrations across the system.
+The Event Management System (EMS) is designed to streamline the process of organizing and attending events. Organizers can create and manage events, attendees can browse and register for events, and administrators can oversee users, events across the system.
 
 ---
 
@@ -15,7 +15,6 @@ The Event Management System (EMS) is designed to streamline the process of organ
 ### 👨‍💼 Admin
 - Manage users (Create, Read, Update, Delete)
 - View all events in the system
-- View all registrations
 - Access system statistics dashboard
 - Create administrator accounts
 
@@ -34,6 +33,7 @@ The Event Management System (EMS) is designed to streamline the process of organ
 - Cancel registrations
 - Receive email notifications
 - Access personal dashboard
+- Update profile
 
 ---
 
@@ -42,9 +42,9 @@ The Event Management System (EMS) is designed to streamline the process of organ
 | Technology | Version | Purpose |
 |------------|----------|---------|
 | PHP | ^8.3 | Server-side programming language |
-| Laravel | ^13.0 | Backend framework |
+| Laravel | ^12 | Backend framework |
 | Laravel Breeze | Latest | Authentication and user management |
-| Blade Template Engine | Included with Laravel 13 | Server-side rendering |
+| Blade Template Engine | Included with Laravel 12 | Server-side rendering |
 | Tailwind CSS | ^3.4 | Frontend styling |
 | Alpine.js | ^3.15 | Frontend interactivity |
 | MySQL | 8.x or later | Database management system |
@@ -61,7 +61,7 @@ The Event Management System (EMS) is designed to streamline the process of organ
 
 Make sure the following are installed:
 
-- PHP ^8.4
+- PHP ^8.3
 - Composer
 - Node.js and npm
 - MySQL Server
@@ -154,7 +154,7 @@ You can use these demo accounts to login
 | Role | Email | Password |
 |--------|---------|----------|
 | Admin | admin@example.com | password |
-| Organizer | charmaine@example.com | password |
+| Organizer | lwandle@example.com | password |
 | Attendee | lisa@example.com | password |
 
 
@@ -164,9 +164,10 @@ You can use these demo accounts to login
 ### User Registration
 
 1. Navigate to `/register`.
-2. Fill in your **name**, **email**, **password**, and select a **role** (`attendee` or `organizer`).
+2. Fill in your **name**, **email**, **password**, and select a **role** as an (`attendee` or `organizer`).
 3. Submit the form to create your account.
-4. Log in at `/login` with your credentials.
+4. It will direct you to the login page.
+5. Log in at `/login` with your credentials.
 
 > Admin accounts can only be created by an existing admin via the **Admin Panel** (`/users/create`).
 
@@ -199,7 +200,6 @@ You can use these demo accounts to login
 2. **Dashboard** (`/dashboard`) — view total events and users.
 3. **Users** (`/users`) — view, create, edit, and delete user accounts.
 4. **Events** (`/events`) — view all events across all organizers.
-5. **Registrations** (`/registrations`) — view all registrations system-wide.
 
 ---
 
@@ -254,5 +254,4 @@ Developed as part of an academic software development project.
 - Ceza Sabelo
 - Dlamini Charmaine
 - Kabala Marc
-
 ---
