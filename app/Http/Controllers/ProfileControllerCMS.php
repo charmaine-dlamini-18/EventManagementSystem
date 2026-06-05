@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+
+/**
+ * ProfileControllerCMS
+ *
+ * Handles user profile management.
+ * Ensures profile information is validated before saving and
+ * requires password confirmation before account deletion.
+ */
+
 // This controller manages user profile actions.
 class ProfileControllerCMS extends ControllerCMS
 {
