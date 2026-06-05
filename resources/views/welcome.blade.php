@@ -127,6 +127,36 @@
                 line-height: 1.6;
             }
 
+            /* ── Card (for authenticated user) ── */
+            .ems-card {
+                background: rgba(255,255,255,0.06);
+                border: 1px solid rgba(255,255,255,0.13);
+                border-radius: 20px;
+                padding: 2rem 2.25rem;
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+                animation: slide-up 0.55s cubic-bezier(0.16,1,0.3,1) both;
+                max-width: 380px;
+                width: 100%;
+            }
+            .ems-card h1 {
+                font-family: 'Syne', sans-serif;
+                font-weight: 800;
+                font-size: 1.5rem;
+                color: #fff;
+                margin-bottom: 0.4rem;
+            }
+            .ems-card p {
+                font-size: 0.875rem;
+                color: rgba(255,255,255,0.45);
+                margin-bottom: 1.75rem;
+            }
+
+            @keyframes slide-up {
+                from { opacity: 0; transform: translateY(24px) scale(0.98); }
+                to   { opacity: 1; transform: translateY(0)    scale(1);    }
+            }
 
 
 
