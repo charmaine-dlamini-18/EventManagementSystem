@@ -160,7 +160,11 @@
                 transition: opacity 0.2s;
             }
             .ems-card a[href*="password"]:hover { opacity: 0.7; }
-            
+
+            /* ── Bottom links (register / sign in) ── */
+            .ems-card p.text-center a {
+                color: #4ade80 !important;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
