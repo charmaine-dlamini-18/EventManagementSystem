@@ -14,7 +14,14 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
-           
+           * { box-sizing: border-box; margin: 0; padding: 0; }
+
+            body {
+                font-family: 'DM Sans', sans-serif;
+                min-height: 100vh;
+                overflow: hidden;
+            }
+
         </style>
     </head>
     <body>
