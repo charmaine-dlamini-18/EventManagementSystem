@@ -27,6 +27,29 @@
                 height: 100%;
                 object-fit: cover;
             }
+            .ems-video-bg::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 0, 0, 0.78) 0%,
+                    rgba(5, 30, 10, 0.72) 50%,
+                    rgba(0, 0, 0, 0.85) 100%
+                );
+            }
+            /* ── Page shell ── */
+            .ems-page {
+                position: relative;
+                z-index: 10;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 1.5rem 1rem;
+            }
+ 
             
         </style>
     </head>
