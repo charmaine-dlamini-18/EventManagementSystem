@@ -150,6 +150,11 @@
             .ems-card .ms-2 {
                 color: rgba(255,255,255,0.5) !important;
             }
+
+            /* ── Error messages ── */
+            .ems-card [class*="text-red"] { color: #f87171 !important; }
+
+            
         </style>
     </head>
     <body class="font-sans antialiased">
