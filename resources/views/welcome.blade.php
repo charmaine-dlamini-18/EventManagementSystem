@@ -87,6 +87,49 @@
                 letter-spacing: -0.03em;
             }
 
+              /* ── Hero text ── */
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                background: rgba(74,222,128,0.12);
+                border: 1px solid rgba(74,222,128,0.3);
+                border-radius: 999px;
+                padding: 0.3rem 1rem;
+                margin-bottom: 1.25rem;
+            }
+            .hero-badge span {
+                font-size: 0.72rem;
+                font-weight: 500;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: #4ade80;
+            }
+
+            .hero-title {
+                font-family: 'Syne', sans-serif;
+                font-weight: 800;
+                font-size: clamp(2.2rem, 6vw, 3.75rem);
+                color: #fff;
+                letter-spacing: -0.04em;
+                line-height: 1.05;
+                margin-bottom: 1rem;
+            }
+            .hero-title span {
+                color: #4ade80;
+            }
+
+            .hero-subtitle {
+                font-size: 1.05rem;
+                color: rgba(255,255,255,0.5);
+                max-width: 420px;
+                margin: 0 auto 2.5rem;
+                line-height: 1.6;
+            }
+
+
+
+
         </style>
     </head>
     <body>
