@@ -59,6 +59,34 @@
                 text-align: center;
             }
 
+              /* ── Logo ── */
+            .ems-logo {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                justify-content: center;
+                margin-bottom: 2rem;
+                text-decoration: none;
+            }
+            .ems-logo-icon {
+                width: 52px;
+                height: 52px;
+                background: #16a34a;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 0 3px rgba(22,163,74,0.25), 0 8px 24px rgba(22,163,74,0.4);
+            }
+            .ems-logo-icon svg { color: #fff; }
+            .ems-logo-text {
+                font-family: 'Syne', sans-serif;
+                font-weight: 800;
+                font-size: 1.75rem;
+                color: #fff;
+                letter-spacing: -0.03em;
+            }
+
         </style>
     </head>
     <body>
