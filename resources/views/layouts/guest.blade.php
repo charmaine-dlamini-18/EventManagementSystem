@@ -170,6 +170,24 @@
             /* ── Helper text ── */
             .ems-card .text-xs.text-gray-400 { color: rgba(255,255,255,0.3) !important; }
 
+            /* ── PRIMARY BUTTON — bold, impossible to miss ── */
+            .ems-card button[type="submit"],
+            .ems-card .ems-btn-primary {
+                background: #16a34a !important;
+                color: #fff !important;
+                font-family: 'Syne', sans-serif !important;
+                font-weight: 700 !important;
+                font-size: 0.95rem !important;
+                letter-spacing: 0.04em !important;
+                border: none !important;
+                border-radius: 10px !important;
+                padding: 0.8rem 1.25rem !important;
+                cursor: pointer !important;
+                box-shadow: 0 4px 20px rgba(22,163,74,0.5) !important;
+                transition: transform 0.15s, box-shadow 0.15s, background 0.15s !important;
+                width: 100% !important;
+            }
+
         </style>
     </head>
     <body class="font-sans antialiased">
