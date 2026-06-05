@@ -174,16 +174,19 @@ You can use these demo accounts to login
 
 ### Posting & Managing Events (Organizer)
 
-1. Log in as an **organizer**.
-2. Go to **Events** → **Create Event** (`/events/create`).
-3. Fill in the event details:
+1. Navigate to `/register`.
+2. Fill in your **name**, **email**, **password**, and select a **role** (`attendee` or `organizer`).
+3. It will direct you to the login page.
+4. Log in as an **organizer**.
+5. Go to **Events** → **Create Event** (`/events/create`).
+6. Fill in the event details:
    - **Title**, **Description**, **Location**
    - **Start Date / End Date**
    - **Capacity** (leave blank for unlimited)
    - **Status** (`draft` or `published`)
-4. Submit to create the event.
-5. From the event list (`/events`), you can **edit**, **delete**, or **view** registrations for your events.
-6. Approve or decline pending registrations from the event details page.
+7. Submit to create the event.
+8. From the event list (`/events`), you can **edit**, **delete**, or **view** registrations for your events.
+9. Approve or decline pending registrations from the event details page.
 
 ### Registering for Events (Attendee)
 
