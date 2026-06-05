@@ -49,7 +49,14 @@
                 justify-content: center;
                 padding: 1.5rem 1rem;
             }
- 
+            * ── Logo ── */
+            .ems-logo {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1.5rem;
+                text-decoration: none;
+            }
             
         </style>
     </head>
