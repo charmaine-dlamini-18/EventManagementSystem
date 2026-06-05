@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+// This controller manages user profile actions.
 class ProfileControllerCMS extends ControllerCMS
 {
+  // This page shows where users edit their profile.
     public function edit(Request $request): View
     {
         return view('profile.edit', [
