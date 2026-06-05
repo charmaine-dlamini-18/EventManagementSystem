@@ -187,6 +187,15 @@
                 transition: transform 0.15s, box-shadow 0.15s, background 0.15s !important;
                 width: 100% !important;
             }
+            .ems-card button[type="submit"]:hover {
+                background: #15803d !important;
+                transform: translateY(-2px) !important;
+                box-shadow: 0 8px 28px rgba(22,163,74,0.65) !important;
+            }
+            .ems-card button[type="submit"]:active {
+                transform: translateY(0) !important;
+                box-shadow: 0 2px 10px rgba(22,163,74,0.4) !important;
+            }
 
         </style>
     </head>
