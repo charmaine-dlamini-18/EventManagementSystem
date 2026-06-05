@@ -17,11 +17,11 @@ class UserControllerCMS extends ControllerCMS
     {
         return ['admin', 'organizer', 'attendee'];
     }
-
+         // Return the list of user roles.
     public function index(Request $request): View
     {
         $query = UserCMS::query();
-
+         // Search users by name or email.
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
