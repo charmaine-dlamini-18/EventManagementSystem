@@ -33,6 +33,7 @@ The Event Management System (EMS) is designed to streamline the process of organ
 - Cancel registrations
 - Receive email notifications
 - Access personal dashboard
+- Update profile
 
 ---
 
