@@ -44,7 +44,7 @@ The Event Management System (EMS) is designed to streamline the process of organ
 | PHP | ^8.3 | Server-side programming language |
 | Laravel | ^12 | Backend framework |
 | Laravel Breeze | Latest | Authentication and user management |
-| Blade Template Engine | Included with Laravel 13 | Server-side rendering |
+| Blade Template Engine | Included with Laravel 12 | Server-side rendering |
 | Tailwind CSS | ^3.4 | Frontend styling |
 | Alpine.js | ^3.15 | Frontend interactivity |
 | MySQL | 8.x or later | Database management system |
