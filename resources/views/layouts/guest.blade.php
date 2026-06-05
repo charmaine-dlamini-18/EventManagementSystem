@@ -127,6 +127,15 @@
                 box-shadow: 0 0 0 3px rgba(74,222,128,0.2) !important;
                 outline: none !important;
             }
+
+             /* ── Role select ── */
+            .ems-card select {
+                color: rgba(255,255,255,0.85) !important;
+            }
+            .ems-card select option {
+                background: #111827;
+                color: #fff;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
