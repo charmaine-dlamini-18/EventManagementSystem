@@ -197,6 +197,14 @@
                 box-shadow: 0 2px 10px rgba(22,163,74,0.4) !important;
             }
 
+            /* ── Session status ── */
+            .ems-card [class*="bg-green-"][class*="border-green-"] {
+                background: rgba(74,222,128,0.1) !important;
+                border-color: rgba(74,222,128,0.3) !important;
+                color: #4ade80 !important;
+                border-radius: 8px !important;
+            }
+
         </style>
     </head>
     <body class="font-sans antialiased">
