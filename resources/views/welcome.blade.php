@@ -225,6 +225,18 @@
                 margin-top: 2.5rem;
                 animation: slide-up 0.75s cubic-bezier(0.16,1,0.3,1) both;
             }
+             .pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                padding: 0.35rem 0.9rem;
+                background: rgba(255,255,255,0.06);
+                border: 1px solid rgba(255,255,255,0.1);
+                border-radius: 999px;
+                font-size: 0.78rem;
+                color: rgba(255,255,255,0.45);
+            }
+            .pill svg { color: #4ade80; }
 
 
         </style>
