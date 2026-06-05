@@ -57,6 +57,24 @@
                 margin-bottom: 1.5rem;
                 text-decoration: none;
             }
+            .ems-logo-icon {
+                width: 48px;
+                height: 48px;
+                background: #16a34a;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 0 3px rgba(22,163,74,0.25), 0 8px 24px rgba(22,163,74,0.35);
+            }
+            .ems-logo-icon svg { color: #fff; }
+            .ems-logo-text {
+                font-family: 'Syne', sans-serif;
+                font-weight: 800;
+                font-size: 1.6rem;
+                color: #fff;
+                letter-spacing: -0.03em;
+            }
             
         </style>
     </head>
