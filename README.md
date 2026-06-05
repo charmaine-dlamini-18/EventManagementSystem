@@ -6,7 +6,7 @@ A role-based web application for creating, managing, and registering for events.
 
 ## 📖 Project Overview
 
-The Event Management System (EMS) is designed to streamline the process of organizing and attending events. Organizers can create and manage events, attendees can browse and register for events, and administrators can oversee users, events, and registrations across the system.
+The Event Management System (EMS) is designed to streamline the process of organizing and attending events. Organizers can create and manage events, attendees can browse and register for events, and administrators can oversee users, events across the system.
 
 ---
 
