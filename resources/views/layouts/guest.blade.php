@@ -154,6 +154,12 @@
             /* ── Error messages ── */
             .ems-card [class*="text-red"] { color: #f87171 !important; }
 
+            /* ── "Forgot password" link ── */
+            .ems-card a[href*="password"] {
+                color: #4ade80 !important;
+                transition: opacity 0.2s;
+            }
+            .ems-card a[href*="password"]:hover { opacity: 0.7; }
             
         </style>
     </head>
