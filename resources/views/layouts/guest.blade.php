@@ -165,6 +165,11 @@
             .ems-card p.text-center a {
                 color: #4ade80 !important;
             }
+            .ems-card p.text-center { color: rgba(255,255,255,0.4) !important; }
+ 
+            /* ── Helper text ── */
+            .ems-card .text-xs.text-gray-400 { color: rgba(255,255,255,0.3) !important; }
+
         </style>
     </head>
     <body class="font-sans antialiased">
