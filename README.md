@@ -292,6 +292,24 @@ git clone <repository-url>
 
 Launch Laravel Herd and ensure all services are running.
 
+### Step 4: Add the Project to Herd
+
+1. Click **Sites** in the left sidebar.
+2. Click **Add Site**.
+3. Select **Link Existing Project**.
+4. Click **Next**.
+5. Browse to the cloned **EMS** project folder.
+6. Click **Next** and complete the setup.
+
+### Step 5: Open the Project Terminal
+
+In Herd, locate the EMS site and click the **Terminal** button on the right-hand side.
+
+### Step 6: Install PHP Dependencies
+
+```bash
+composer install
+```
 
 ## 🔑 Demo Accounts
 
