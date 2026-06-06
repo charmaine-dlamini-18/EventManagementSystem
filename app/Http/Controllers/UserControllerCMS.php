@@ -11,17 +11,25 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
+/**
+ * UserControllerCMS
+ *
+ * Handles user management functions such as creating, viewing,
+ * updating and searching.
+ * Validates user data, manages user roles and encrypts passwords.
+ */
+
 class UserControllerCMS extends ControllerCMS
 {
     private function roles(): array
     {
         return ['admin', 'organizer', 'attendee'];
     }
-
+         // Return the list of user roles.
     public function index(Request $request): View
     {
         $query = UserCMS::query();
-
+         // Search users by name or email.
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
@@ -39,9 +47,10 @@ class UserControllerCMS extends ControllerCMS
     {
         return view('users.create', ['roles' => $this->roles()]);
     }
-
+        // Save a new user to the database.
     public function store(Request $request): RedirectResponse
     {
+           // Validate the user input.
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
@@ -58,7 +67,7 @@ class UserControllerCMS extends ControllerCMS
             'password.min' => 'Password must be at least :min characters.',
             'role.required' => 'Please select a role.',
         ]);
-
+             // Encrypt the password.
         $validated['password'] = Hash::make($validated['password']);
 
         UserCMS::create($validated);
@@ -66,9 +75,10 @@ class UserControllerCMS extends ControllerCMS
         return redirect()->route('users.index')
             ->with('success', 'User created successfully.');
     }
-
+        // Show information and statistics for one user.
     public function show(UserCMS $user): View
     {
+         // Count the user's events and registrations.
         $stats = [
             'events' => $user->events()->count(),
             'registrations' => $user->registrations()->count(),
@@ -129,7 +139,8 @@ class UserControllerCMS extends ControllerCMS
         if ($user->role === 'admin' && UserCMS::where('role', 'admin')->count() <= 1) {
             return back()->with('error', 'Cannot delete the last admin account.');
         }
-
+        
+        // Remove the user from the database.
         $user->delete();
 
         return redirect()->route('users.index')
