@@ -62,6 +62,11 @@
             }
  
             main { flex: 1; }
+
+            /* ── Scrollbar ── */
+            ::-webkit-scrollbar { width: 6px; }
+            ::-webkit-scrollbar-track { background: var(--bg); }
+            ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 99px; }
         </style>
     </head>
     <body>
