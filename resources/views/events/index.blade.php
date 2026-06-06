@@ -1,116 +1,110 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-6">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-        
+<div style="padding:2rem 0;">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="padding-left:1rem;padding-right:1rem;">
 
         @if(session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 rounded-lg px-4 py-3 text-sm">{{ session('success') }}</div>
+            <div class="alert alert-success" style="margin-bottom:1.5rem;">{{ session('success') }}</div>
         @endif
         @if(session('error'))
-            <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">{{ session('error') }}</div>
+            <div class="alert alert-error" style="margin-bottom:1.5rem;">{{ session('error') }}</div>
         @endif
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Events</h1>
-                <p class="text-sm text-gray-500 mt-0.5">Discover and join upcoming events</p>
+
+        {{-- Header --}}
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+            <div class="page-header" style="margin-bottom:0;">
+                <h1>Events</h1>
+                <p>Discover and join upcoming events</p>
             </div>
-            <div class="flex gap-2">
-                <a href="{{ route('events.calendar') }}" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition text-sm font-medium">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    Calendar
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+                <a href="{{ route('events.calendar') }}" class="btn btn-ghost">
+                    <i data-lucide="calendar" style="width:15px;height:15px;"></i> Calendar
                 </a>
                 @auth
                     @can('manage-events-cms')
-                        <a href="{{ route('events.create') }}" class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
-                            <i data-lucide="plus" class="w-4 h-4"></i>
-                            Create Event
+                        <a href="{{ route('events.create') }}" class="btn btn-primary">
+                            <i data-lucide="plus" style="width:15px;height:15px;"></i> Create Event
                         </a>
                     @endcan
                 @endauth
             </div>
         </div>
 
-    
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-            <form method="GET" action="{{ route('events.index') }}" class="flex flex-col md:flex-row gap-3">
-                <div class="flex-1 relative">
-                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search events..." class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        {{-- Search bar --}}
+        <div class="card" style="padding:1rem;margin-bottom:1.5rem;">
+            <form method="GET" action="{{ route('events.index') }}" style="display:flex;flex-wrap:wrap;gap:0.65rem;">
+                <div style="flex:1;min-width:180px;position:relative;">
+                    <i data-lucide="search" style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);width:15px;height:15px;color:rgba(230,237,243,0.3);"></i>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search events…"
+                           class="form-input" style="padding-left:2.25rem;">
                 </div>
-                <select name="status" class="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white">
-                    <option value="">All</option>
+                <select name="status" class="form-select" style="width:auto;min-width:130px;">
+                    <option value="">All statuses</option>
                     <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Upcoming</option>
-                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Drafts</option>
+                    <option value="draft"     {{ request('status') == 'draft'     ? 'selected' : '' }}>Drafts</option>
                 </select>
-                <button type="submit" class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">Search</button>
+                <button type="submit" class="btn btn-primary">Search</button>
                 @if(request('search') || request('status'))
-                    <a href="{{ route('events.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium">Clear</a>
+                    <a href="{{ route('events.index') }}" class="btn btn-ghost">Clear</a>
                 @endif
             </form>
         </div>
 
-    
         @if(request('search') || request('status'))
-            <p class="text-sm text-gray-500">{{ $events->total() }} result(s) found</p>
+            <p style="font-size:0.8rem;color:rgba(230,237,243,0.35);margin-bottom:1rem;">{{ $events->total() }} result(s) found</p>
         @endif
 
-       
         @if($events->isEmpty())
-            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-12 text-center">
-                <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="calendar-x" class="w-7 h-7 text-gray-400"></i>
+            <div class="card">
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i data-lucide="calendar-x" style="width:24px;height:24px;"></i></div>
+                    <h3>No events found</h3>
+                    <p>Try adjusting your search or filters.</p>
+                    <a href="{{ route('events.index') }}" class="btn btn-primary">View All Events</a>
                 </div>
-                <h3 class="text-lg font-medium text-gray-900 mb-2">No events found</h3>
-                <p class="text-gray-500 text-sm mb-6">Try adjusting your search or filters.</p>
-                <a href="{{ route('events.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">View All Events</a>
             </div>
         @else
-            <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));">
                 @foreach($events as $event)
-                    <a href="{{ route('events.show', $event) }}" class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-200 group overflow-hidden">
-                        <div class="h-2 bg-green-600"></div>
-                        <div class="p-5">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="px-2.5 py-1 text-xs font-medium rounded-full 
-                                    @if($event->status === 'published') bg-green-100 text-green-700
-                                    @elseif($event->status === 'draft') bg-amber-100 text-amber-700
-                                    @else bg-red-100 text-red-700 @endif">
+                    <a href="{{ route('events.show', $event) }}" style="text-decoration:none;display:flex;flex-direction:column;" class="card card-accent">
+                        <div style="padding:1.25rem 1.25rem 1rem;flex:1;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.85rem;">
+                                <span class="badge {{ $event->status === 'published' ? 'badge-green' : ($event->status === 'draft' ? 'badge-amber' : 'badge-red') }}">
                                     {{ ucfirst($event->status) }}
                                 </span>
                                 @if($event->capacity)
-                                    <span class="text-xs text-gray-400">{{ $event->registrations()->where('status', 'confirmed')->count() }}/{{ $event->capacity }} spots</span>
+                                    <span style="font-size:0.75rem;color:rgba(230,237,243,0.3);">
+                                        {{ $event->registrations()->where('status','confirmed')->count() }}/{{ $event->capacity }} spots
+                                    </span>
                                 @endif
                             </div>
-                            <h2 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">{{ $event->title }}</h2>
-                            <p class="text-sm text-gray-500 mb-4 line-clamp-2">{{ $event->description }}</p>
-                            <div class="space-y-2 text-sm">
-                                <div class="flex items-center gap-2 text-gray-600">
-                                    <i data-lucide="map-pin" class="w-4 h-4 text-gray-400"></i>
-                                    <span class="truncate">{{ $event->location }}</span>
+                            <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:#e6edf3;margin:0 0 0.5rem;letter-spacing:-0.02em;">{{ $event->title }}</h2>
+                            <p style="font-size:0.83rem;color:rgba(230,237,243,0.4);margin:0 0 1rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ $event->description }}</p>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:rgba(230,237,243,0.4);">
+                                    <i data-lucide="map-pin" style="width:13px;height:13px;flex-shrink:0;"></i>
+                                    <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $event->location }}</span>
                                 </div>
-                                <div class="flex items-center gap-2 text-gray-600">
-                                    <i data-lucide="clock" class="w-4 h-4 text-gray-400"></i>
+                                <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:rgba(230,237,243,0.4);">
+                                    <i data-lucide="clock" style="width:13px;height:13px;flex-shrink:0;"></i>
                                     <span>{{ $event->start_date->format('M d, Y') }} at {{ $event->start_date->format('h:i A') }}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="px-5 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <span class="text-xs font-medium text-green-700">{{ substr($event->user->name, 0, 1) }}</span>
-                                </div>
-                                <span class="text-xs text-gray-500">{{ $event->user->name }}</span>
+                        <div style="padding:0.75rem 1.25rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;">
+                                <div class="avatar" style="width:26px;height:26px;border-radius:6px;font-size:0.7rem;">{{ substr($event->user->name,0,1) }}</div>
+                                <span style="font-size:0.78rem;color:rgba(230,237,243,0.35);">{{ $event->user->name }}</span>
                             </div>
-                            <span class="text-xs text-green-600 font-medium group-hover:text-green-800">Details →</span>
+                            <span style="font-size:0.78rem;color:#4ade80;font-weight:500;">Details →</span>
                         </div>
                     </a>
                 @endforeach
             </div>
-            <div class="flex justify-center">{{ $events->withQueryString()->links() }}</div>
+            <div style="display:flex;justify-content:center;margin-top:2rem;">{{ $events->withQueryString()->links() }}</div>
         @endif
+
     </div>
 </div>
 @endsection
