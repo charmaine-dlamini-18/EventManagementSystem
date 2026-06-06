@@ -60,98 +60,41 @@ The Event Management System (EMS) is designed to streamline the process of organ
 ### Prerequisites
 
 Make sure the following are installed:
-
+- Laravel Herd
+- Git
 - PHP ^8.3
 - Composer
 - Node.js and npm
 - MySQL Server
 - XAMPP
 
-### Step 1: Start XAMPP
+## Option 1: Open the Project Using VS Code
 
-Before running the project, start:
+### Step 1: Create a Project Folder
 
-- Apache
-- MySQL
+Create a folder anywhere on your computer where you would like to store the project.
 
-from the XAMPP Control Panel.
+Example:
+
+```text
+C:\Projects
+```
 
 ### Step 2: Clone the Repository
 
-Open VS Code and clone the repository:
-
-```bash
-git clone <repository-url>
-cd EMS
-```
-
-### Step 3: Install PHP Dependencies
-
-```bash
-composer install
-```
-
-### Step 4: Create the Environment File
-
-```bash
-copy .env.example .env
-```
-
-### Step 5: Generate the Application Key
-
-```bash
-php artisan key:generate
-```
-### Step 6: Configure the Database
-
-Open the `.env` file and update the database settings:
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=event_management_system
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-Create the database in phpMyAdmin and then run:
-
-```bash
-php artisan migrate --seed
-```
-
-### Step 7: Install Frontend Dependencies
-
-```bash
-npm install
-```
-
-### Step 8: Start Vite
-
-```bash
-npm run dev
-```
-
-### Step 9: Start the Laravel Server
-
-Open a **new terminal** and run:
-
-```bash
-php artisan serve
-```
-
-You should see something similar to:
-
-```text
-http://127.0.0.1:8000
-```
+1. Open **VS Code**.
+2. Select **Clone Git Repository** from the welcome screen or open the Command Palette (`Ctrl + Shift + P`) and search for **Git: Clone**.
+3. Paste the repository URL.
+4. Select the folder you created in Step 1 as the destination.
+5. Once cloning is complete, click **Open** when prompted.
 
 Open the URL in your browser.
 
 > ⚠️ Make sure Apache and MySQL are running in XAMPP before opening the application.
 
 ---
+
+
 
 ## 🔑 Demo Accounts
 
