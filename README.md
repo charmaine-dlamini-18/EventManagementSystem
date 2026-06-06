@@ -96,6 +96,12 @@ composer install
 ```bash
 copy .env.example .env
 ```
+
+### Step 5: Generate the Application Key
+
+```bash
+php artisan key:generate
+```
 ### Step 6: Configure the Database
 
 Open the `.env` file and update the database settings:
