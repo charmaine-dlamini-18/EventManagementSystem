@@ -39,6 +39,29 @@
                 min-height: 100vh;
                 margin: 0;
             }
+
+             /* Subtle grid pattern on body */
+            body::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                background-image:
+                    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+                background-size: 40px 40px;
+                pointer-events: none;
+            }
+ 
+            #app-shell {
+                position: relative;
+                z-index: 1;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+ 
+            main { flex: 1; }
         </style>
     </head>
     <body>
