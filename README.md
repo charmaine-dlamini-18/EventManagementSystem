@@ -164,6 +164,133 @@ http://127.0.0.1:8000
 
 ---
 
+## 🚀 Installation & Setup
+
+### Prerequisites
+
+Make sure the following are installed:
+
+- Laravel Herd
+- Git
+- PHP ^8.3
+- Composer
+- Node.js and npm
+- MySQL Server
+
+---
+
+## Option 1: Open the Project Using VS Code
+
+### Step 1: Create a Project Folder
+
+Create a folder anywhere on your computer where you would like to store the project.
+
+Example:
+
+```text
+C:\Projects
+```
+
+### Step 2: Clone the Repository
+
+1. Open **VS Code**.
+2. Select **Clone Git Repository** from the welcome screen or open the Command Palette (`Ctrl + Shift + P`) and search for **Git: Clone**.
+3. Paste the repository URL.
+4. Select the folder you created in Step 1 as the destination.
+5. Once cloning is complete, click **Open** when prompted.
+
+### Step 3: Open the Integrated Terminal
+
+In VS Code, open a terminal:
+
+```text
+Terminal → New Terminal
+```
+
+### Step 4: Install PHP Dependencies
+
+```bash
+composer install
+```
+
+### Step 5: Create the Environment File
+
+```bash
+copy .env.example .env
+```
+
+### Step 6: Generate the Application Key
+
+```bash
+php artisan key:generate
+```
+
+### Step 7: Configure the Database
+
+Open the `.env` file and update the database settings:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=event_management_system
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Create the database in MySQL and run:
+
+```bash
+php artisan migrate --seed
+```
+
+### Step 8: Install Frontend Dependencies
+
+```bash
+npm install
+```
+
+### Step 9: Start Vite
+
+```bash
+npm run dev
+```
+
+### Step 10: Start the Laravel Development Server
+
+Open a new terminal and run:
+
+```bash
+php artisan serve
+```
+
+Open the generated URL in your browser.
+
+Example:
+
+```text
+http://127.0.0.1:8000
+```
+
+---
+
+## Option 2: Open the Project Using Laravel Herd
+
+### Step 1: Create a Project Folder
+
+Create a folder anywhere on your computer where you would like to store the project.
+
+### Step 2: Clone the Repository
+
+Open Command Prompt inside the folder and run:
+
+```bash
+git clone <repository-url>
+```
+
+### Step 3: Open Laravel Herd
+
+Launch Laravel Herd and ensure all services are running.
 
 
 ## 🔑 Demo Accounts
