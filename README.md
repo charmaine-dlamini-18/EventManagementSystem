@@ -88,6 +88,27 @@ C:\Projects
 4. Select the folder you created in Step 1 as the destination.
 5. Once cloning is complete, click **Open** when prompted.
 
+### Step 3: Open the Integrated Terminal
+
+In VS Code, open a terminal:
+
+```text
+Terminal → New Terminal
+```
+
+### Step 4: Install PHP Dependencies
+
+```bash
+composer install
+```
+
+### Step 5: Create the Environment File
+
+```bash
+copy .env.example .env
+```
+
+
 Open the URL in your browser.
 
 > ⚠️ Make sure Apache and MySQL are running in XAMPP before opening the application.
