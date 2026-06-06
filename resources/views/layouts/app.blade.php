@@ -14,7 +14,31 @@
         @stack('styles')
  
         <style>
-            
+            :root {
+                --bg:        #0d1117;
+                --bg-2:      #161b22;
+                --bg-3:      #1c2333;
+                --border:    rgba(255,255,255,0.08);
+                --border-2:  rgba(255,255,255,0.13);
+                --green:     #16a34a;
+                --green-lt:  #4ade80;
+                --green-dim: rgba(22,163,74,0.15);
+                --text:      #e6edf3;
+                --text-2:    rgba(230,237,243,0.6);
+                --text-3:    rgba(230,237,243,0.35);
+                --font-head: 'Syne', sans-serif;
+                --font-body: 'DM Sans', sans-serif;
+            }
+ 
+            *, *::before, *::after { box-sizing: border-box; }
+ 
+            body {
+                font-family: var(--font-body);
+                background: var(--bg);
+                color: var(--text);
+                min-height: 100vh;
+                margin: 0;
+            }
         </style>
     </head>
     <body>
