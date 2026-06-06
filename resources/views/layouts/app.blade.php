@@ -76,6 +76,28 @@
                 overflow: hidden;
             }
             .card-accent { border-top: 2px solid var(--green); }
+
+            /* ── Stat card ── */
+            .stat-card {
+                background: var(--bg-2);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 1.25rem 1.5rem;
+            }
+            .stat-card .stat-value {
+                font-family: var(--font-head);
+                font-size: 2rem;
+                font-weight: 800;
+                color: var(--text);
+                line-height: 1;
+            }
+            .stat-card .stat-label {
+                font-size: 0.8rem;
+                color: var(--text-3);
+                margin-top: 0.35rem;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
         </style>
     </head>
     <body>
