@@ -67,6 +67,15 @@
             ::-webkit-scrollbar { width: 6px; }
             ::-webkit-scrollbar-track { background: var(--bg); }
             ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 99px; }
+
+            /* ── Cards ── */
+            .card {
+                background: var(--bg-2);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                overflow: hidden;
+            }
+            .card-accent { border-top: 2px solid var(--green); }
         </style>
     </head>
     <body>
