@@ -1,124 +1,143 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-200 sticky top-0 z-50">
+<nav x-data="{ open: false }" style="background:#161b22; border-bottom:1px solid rgba(255,255,255,0.08); position:sticky; top:0; z-index:50;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-14">
-            <!-- Logo -->
-            <div class="flex items-center">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                        <i data-lucide="calendar" class="w-4 h-4 text-white"></i>
+        <div style="display:flex; justify-content:space-between; align-items:center; height:56px;">
+
+            {{-- Logo + Nav Links --}}
+            <div style="display:flex; align-items:center; gap:2rem;">
+                <a href="{{ route('dashboard') }}" style="display:flex; align-items:center; gap:0.6rem; text-decoration:none;">
+                    <div style="width:32px;height:32px;background:#16a34a;border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(22,163,74,0.25);">
+                        <i data-lucide="calendar" style="width:16px;height:16px;color:#fff;"></i>
                     </div>
-                    <span class="font-bold text-gray-900 text-lg">EMS</span>
+                    <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#e6edf3;letter-spacing:-0.02em;">EMS</span>
                 </a>
 
-                <!-- Nav Links -->
-                <div class="hidden sm:flex sm:ms-8 items-center gap-1">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('events.index')" :active="request()->routeIs('events.index') || request()->routeIs('events.show')">
-                        {{ __('Events') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('events.calendar')" :active="request()->routeIs('events.calendar')">
-                        {{ __('Calendar') }}
-                    </x-nav-link>
+                <div class="hidden sm:flex" style="align-items:center; gap:0.25rem;">
+                    @php $active = 'color:#4ade80; background:rgba(74,222,128,0.08); border-radius:7px;'; $normal = 'color:rgba(230,237,243,0.5);'; @endphp
+
+                    <a href="{{ route('dashboard') }}"
+                       style="padding:0.4rem 0.85rem; font-size:0.875rem; font-weight:500; text-decoration:none; border-radius:7px; transition:color 0.15s, background 0.15s;
+                              {{ request()->routeIs('dashboard') ? $active : $normal }}">
+                        Dashboard
+                    </a>
+                    <a href="{{ route('events.index') }}"
+                       style="padding:0.4rem 0.85rem; font-size:0.875rem; font-weight:500; text-decoration:none; border-radius:7px; transition:color 0.15s, background 0.15s;
+                              {{ request()->routeIs('events.*') ? $active : $normal }}">
+                        Events
+                    </a>
+                    <a href="{{ route('events.calendar') }}"
+                       style="padding:0.4rem 0.85rem; font-size:0.875rem; font-weight:500; text-decoration:none; border-radius:7px; transition:color 0.15s, background 0.15s;
+                              {{ request()->routeIs('events.calendar') ? $active : $normal }}">
+                        Calendar
+                    </a>
+                    <a href="{{ route('registrations.index') }}"
+                       style="padding:0.4rem 0.85rem; font-size:0.875rem; font-weight:500; text-decoration:none; border-radius:7px; transition:color 0.15s, background 0.15s;
+                              {{ request()->routeIs('registrations.*') ? $active : $normal }}">
+                        Registrations
+                    </a>
                     @auth
                         @can('admin-only-cms')
-                            <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
-                                {{ __('Users') }}
-                            </x-nav-link>
+                            <a href="{{ route('users.index') }}"
+                               style="padding:0.4rem 0.85rem; font-size:0.875rem; font-weight:500; text-decoration:none; border-radius:7px; transition:color 0.15s, background 0.15s;
+                                      {{ request()->routeIs('users.*') ? $active : $normal }}">
+                                Users
+                            </a>
                         @endcan
                     @endauth
                 </div>
             </div>
 
-            <!-- Right Side -->
-            <div class="hidden sm:flex items-center gap-3">
+            {{-- Right: Notifications + User --}}
+            <div class="hidden sm:flex" style="align-items:center; gap:0.5rem;">
                 @auth
-                    <!-- Notifications -->
-                    <x-dropdown align="right" width="48">
+                    @php
+                        $user = Auth::user();
+                        $pendingCount = $user->registrations()->where('status','pending')->count();
+                    @endphp
+
+                    {{-- Bell --}}
+                    <x-dropdown align="right" width="52">
                         <x-slot name="trigger">
-                            <button class="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                                <i data-lucide="bell" class="w-5 h-5"></i>
-                                <?php $user = Auth::user(); ?>
-                                <?php $pendingCount = $user->registrations()->where('status', 'pending')->count(); ?>
+                            <button style="position:relative;padding:0.45rem;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:8px;cursor:pointer;color:rgba(230,237,243,0.5);transition:background 0.15s,color 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.06)';this.style.color='#e6edf3'" onmouseout="this.style.background='transparent';this.style.color='rgba(230,237,243,0.5)'">
+                                <i data-lucide="bell" style="width:18px;height:18px;display:block;"></i>
                                 @if($pendingCount > 0)
-                                    <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">{{ $pendingCount }}</span>
+                                    <span style="position:absolute;top:-3px;right:-3px;width:16px;height:16px;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;">{{ $pendingCount }}</span>
                                 @endif
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase border-b border-gray-100">Notifications</div>
-                            @if($pendingCount > 0)
-                                <x-dropdown-link :href="route('registrations.index')">{{ $pendingCount }} pending registration(s)</x-dropdown-link>
-                            @else
-                                <div class="px-4 py-3 text-sm text-gray-500">No new notifications</div>
-                            @endif
+                            <div style="background:#1c2333;border:1px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;min-width:200px;">
+                                <div style="padding:0.6rem 1rem;font-size:0.7rem;font-weight:600;color:rgba(230,237,243,0.35);text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid rgba(255,255,255,0.06);">Notifications</div>
+                                @if($pendingCount > 0)
+                                    <a href="{{ route('registrations.index') }}" style="display:block;padding:0.65rem 1rem;font-size:0.85rem;color:#fbbf24;text-decoration:none;">⏳ {{ $pendingCount }} pending registration(s)</a>
+                                @else
+                                    <div style="padding:0.75rem 1rem;font-size:0.85rem;color:rgba(230,237,243,0.4);">No new notifications</div>
+                                @endif
+                            </div>
                         </x-slot>
                     </x-dropdown>
 
-                    <!-- User Menu -->
-                    <?php $user = Auth::user(); ?>
-                    <x-dropdown align="right" width="48">
+                    {{-- User menu --}}
+                    <x-dropdown align="right" width="52">
                         <x-slot name="trigger">
-                            <button class="flex items-center gap-2 p-1.5 hover:bg-gray-100 rounded-lg transition">
-                                <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white text-sm font-medium">
+                            <button style="display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.65rem;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:8px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='transparent'">
+                                <div style="width:28px;height:28px;background:rgba(22,163,74,0.2);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#4ade80;font-size:0.8rem;font-weight:700;">
                                     {{ substr($user->name, 0, 1) }}
                                 </div>
-                                <span class="text-sm font-medium text-gray-700">{{ explode(' ', $user->name)[0] }}</span>
-                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                                <span style="font-size:0.85rem;font-weight:500;color:rgba(230,237,243,0.75);">{{ explode(' ', $user->name)[0] }}</span>
+                                <i data-lucide="chevron-down" style="width:14px;height:14px;color:rgba(230,237,243,0.35);"></i>
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <div class="px-4 py-2 border-b border-gray-100">
-                                <p class="text-sm font-medium text-gray-900">{{ $user->name }}</p>
-                                <p class="text-xs text-gray-500">{{ $user->email }}</p>
+                            <div style="background:#1c2333;border:1px solid rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;min-width:200px;">
+                                <div style="padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);">
+                                    <p style="font-size:0.875rem;font-weight:600;color:#e6edf3;margin:0;">{{ $user->name }}</p>
+                                    <p style="font-size:0.75rem;color:rgba(230,237,243,0.4);margin:0.1rem 0 0;">{{ $user->email }}</p>
+                                </div>
+                                <a href="{{ route('profile.edit') }}" style="display:flex;align-items:center;gap:0.5rem;padding:0.65rem 1rem;font-size:0.85rem;color:rgba(230,237,243,0.6);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.04)';this.style.color='#e6edf3'" onmouseout="this.style.background='transparent';this.style.color='rgba(230,237,243,0.6)'">
+                                    <i data-lucide="user" style="width:14px;height:14px;"></i> Profile
+                                </a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" onclick="this.closest('form').submit()" style="display:flex;align-items:center;gap:0.5rem;padding:0.65rem 1rem;font-size:0.85rem;color:rgba(248,113,113,0.8);width:100%;background:transparent;border:none;cursor:pointer;text-align:left;" onmouseover="this.style.background='rgba(255,255,255,0.04)';this.style.color='#f87171'" onmouseout="this.style.background='transparent';this.style.color='rgba(248,113,113,0.8)'">
+                                        <i data-lucide="log-out" style="width:14px;height:14px;"></i> Log Out
+                                    </button>
+                                </form>
                             </div>
-                            <x-dropdown-link :href="route('profile.edit')">Profile</x-dropdown-link>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</x-dropdown-link>
-                            </form>
                         </x-slot>
                     </x-dropdown>
                 @endauth
             </div>
 
-            <!-- Mobile Menu Button -->
-            <div class="flex items-center sm:hidden">
-                <button @click="open = ! open" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
-                    <i data-lucide="menu" class="h-6 w-6"></i>
+            {{-- Mobile hamburger --}}
+            <div class="sm:hidden">
+                <button @click="open = !open" style="padding:0.45rem;background:transparent;border:1px solid rgba(255,255,255,0.08);border-radius:8px;cursor:pointer;color:rgba(230,237,243,0.6);">
+                    <i data-lucide="menu" style="width:20px;height:20px;display:block;"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <div :class="{'block': open, 'hidden': ! open }" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 border-t border-gray-200">
-            <x-responsive-nav-link :href="route('dashboard')">Dashboard</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('events.index')">Events</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('events.calendar')">Calendar</x-responsive-nav-link>
+    {{-- Mobile menu --}}
+    <div :class="{'block': open, 'hidden': !open}" class="hidden sm:hidden" style="border-top:1px solid rgba(255,255,255,0.06);padding:0.75rem 1rem 1rem;">
+        <div style="display:flex;flex-direction:column;gap:0.25rem;">
+            <a href="{{ route('dashboard') }}" style="padding:0.6rem 0.85rem;font-size:0.875rem;color:rgba(230,237,243,0.6);text-decoration:none;border-radius:8px;">Dashboard</a>
+            <a href="{{ route('events.index') }}" style="padding:0.6rem 0.85rem;font-size:0.875rem;color:rgba(230,237,243,0.6);text-decoration:none;border-radius:8px;">Events</a>
+            <a href="{{ route('events.calendar') }}" style="padding:0.6rem 0.85rem;font-size:0.875rem;color:rgba(230,237,243,0.6);text-decoration:none;border-radius:8px;">Calendar</a>
+            <a href="{{ route('registrations.index') }}" style="padding:0.6rem 0.85rem;font-size:0.875rem;color:rgba(230,237,243,0.6);text-decoration:none;border-radius:8px;">Registrations</a>
             @auth
                 @can('admin-only-cms')
-                    <x-responsive-nav-link :href="route('users.index')">Users</x-responsive-nav-link>
+                    <a href="{{ route('users.index') }}" style="padding:0.6rem 0.85rem;font-size:0.875rem;color:rgba(230,237,243,0.6);text-decoration:none;border-radius:8px;">Users</a>
                 @endcan
-            @endauth
-        </div>
-        @auth
-            <div class="pt-4 pb-3 border-t border-gray-200">
-                <?php $user = Auth::user(); ?>
-                <div class="px-4">
-                    <div class="font-medium text-sm text-gray-900">{{ $user->name }}</div>
-                    <div class="text-xs text-gray-500">{{ $user->email }}</div>
-                </div>
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">Profile</x-responsive-nav-link>
+                <div style="margin-top:0.5rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.06);">
+                    @php $user = Auth::user(); @endphp
+                    <p style="font-size:0.8rem;color:rgba(230,237,243,0.35);padding:0 0.85rem 0.5rem;">{{ $user->name }} · {{ $user->email }}</p>
+                    <a href="{{ route('profile.edit') }}" style="padding:0.6rem 0.85rem;font-size:0.875rem;color:rgba(230,237,243,0.6);text-decoration:none;border-radius:8px;display:block;">Profile</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</x-responsive-nav-link>
+                        <button type="submit" style="padding:0.6rem 0.85rem;font-size:0.875rem;color:#f87171;background:transparent;border:none;cursor:pointer;display:block;width:100%;text-align:left;border-radius:8px;">Log Out</button>
                     </form>
                 </div>
-            </div>
-        @endauth
+            @endauth
+        </div>
     </div>
 </nav>
