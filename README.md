@@ -232,6 +232,34 @@ Create the database in phpMyAdmin and then run:
 php artisan migrate --seed
 ```
 
+### Step 10: Install Frontend Dependencies
+
+```bash
+npm install
+```
+
+### Step 11: Start Vite
+
+```bash
+npm run dev
+```
+
+Keep this terminal running while using the application.
+
+### Step 12: Open the Application
+
+Return to Herd and click the site's URL.
+
+Example:
+
+```text
+https://ems.test
+```
+
+The Event Management System should now be running successfully.
+
+---
+
 ## 🔑 Demo Accounts
 
 You can use these demo accounts to login
