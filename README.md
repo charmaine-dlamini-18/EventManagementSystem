@@ -60,43 +60,61 @@ The Event Management System (EMS) is designed to streamline the process of organ
 ### Prerequisites
 
 Make sure the following are installed:
-
+- Laravel Herd
+- Git
 - PHP ^8.3
 - Composer
 - Node.js and npm
 - MySQL Server
 - XAMPP
 
-### Step 1: Start XAMPP
+## Option 1: Open the Project Using VS Code
 
-Before running the project, start:
+### Step 1: Create a Project Folder
 
-- Apache
-- MySQL
+Create a folder anywhere on your computer where you would like to store the project.
 
-from the XAMPP Control Panel.
+Example:
+
+```text
+C:\Projects
+```
 
 ### Step 2: Clone the Repository
 
-Open VS Code and clone the repository:
+1. Open **VS Code**.
+2. Select **Clone Git Repository** from the welcome screen or open the Command Palette (`Ctrl + Shift + P`) and search for **Git: Clone**.
+3. Paste the repository URL.
+4. Select the folder you created in Step 1 as the destination.
+5. Once cloning is complete, click **Open** when prompted.
 
-```bash
-git clone <repository-url>
-cd EMS
+### Step 3: Open the Integrated Terminal
+
+In VS Code, open a terminal:
+
+```text
+Terminal → New Terminal
 ```
 
-### Step 3: Install PHP Dependencies
+### Step 4: Install PHP Dependencies
 
 ```bash
 composer install
 ```
 
-### Step 4: Create the Environment File
+### Step 5: Create the Environment File
 
 ```bash
 copy .env.example .env
 ```
-### Step 6: Configure the Database
+
+### Step 6: Generate the Application Key
+
+```bash
+php artisan key:generate
+```
+
+### Step 7: Configure the Database
 
 Open the `.env` file and update the database settings:
 
@@ -115,35 +133,130 @@ Create the database in phpMyAdmin and then run:
 php artisan migrate --seed
 ```
 
-### Step 7: Install Frontend Dependencies
+### Step 8: Install Frontend Dependencies
 
 ```bash
 npm install
 ```
 
-### Step 8: Start Vite
+### Step 9: Start Vite
 
 ```bash
 npm run dev
 ```
 
-### Step 9: Start the Laravel Server
+### Step 10: Start the Laravel Development Server
 
-Open a **new terminal** and run:
+Open a new terminal and run:
 
 ```bash
 php artisan serve
 ```
 
-You should see something similar to:
+Open the generated URL in your browser.
+
+Example:
 
 ```text
 http://127.0.0.1:8000
 ```
-
-Open the URL in your browser.
-
 > ⚠️ Make sure Apache and MySQL are running in XAMPP before opening the application.
+
+---
+
+## Option 2: Open the Project Using Laravel Herd
+
+### Step 1: Create a Project Folder
+
+Create a folder anywhere on your computer where you would like to store the project.
+
+### Step 2: Clone the Repository
+
+Open Command Prompt inside the folder and run:
+
+```bash
+git clone <repository-url>
+```
+
+### Step 3: Open Laravel Herd
+
+Launch Laravel Herd and ensure all services are running.
+
+### Step 4: Add the Project to Herd
+
+1. Click **Sites** in the left sidebar.
+2. Click **Add Site**.
+3. Select **Link Existing Project**.
+4. Click **Next**.
+5. Browse to the cloned **EMS** project folder.
+6. Click **Next** and complete the setup.
+
+### Step 5: Open the Project Terminal
+
+In Herd, locate the EMS site and click the **Terminal** button on the right-hand side.
+
+### Step 6: Install PHP Dependencies
+
+```bash
+composer install
+```
+
+### Step 7: Create the Environment File
+
+```bash
+copy .env.example .env
+```
+
+### Step 8: Generate the Application Key
+
+```bash
+php artisan key:generate
+```
+
+### Step 9: Configure the Database
+
+Open the `.env` file and update the database settings:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=event_management_system
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Create the database in phpMyAdmin and then run:
+
+```bash
+php artisan migrate --seed
+```
+
+### Step 10: Install Frontend Dependencies
+
+```bash
+npm install
+```
+
+### Step 11: Start Vite
+
+```bash
+npm run dev
+```
+
+Keep this terminal running while using the application.
+
+### Step 12: Open the Application
+
+Return to Herd and click the site's URL.
+
+Example:
+
+```text
+https://ems.test
+```
+
+The Event Management System should now be running successfully.
 
 ---
 
