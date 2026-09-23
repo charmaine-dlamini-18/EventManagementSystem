@@ -364,7 +364,7 @@ Developed as part of an academic software development project.
 
 ### Team Members
 
-- Ceza Sabelo
-- Dlamini Charmaine
-- Kabala Marc
+- Sabelo Ceza
+- Charmaine Dlamini
+- Marc Kabala
 ---
